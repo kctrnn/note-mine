@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Signup = (props) => {
+const SignupPage = (props) => {
   return <div>Signup page</div>;
 };
 
-Signup.propTypes = {};
+SignupPage.propTypes = {};
 
-export default Signup;
+export default SignupPage;

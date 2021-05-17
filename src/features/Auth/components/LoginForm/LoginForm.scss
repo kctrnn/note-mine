@@ -1,0 +1,96 @@
+.form {
+  margin: 2.5rem auto;
+  max-width: 42rem;
+  padding: 4rem 3rem 2.5rem;
+  border-top: 2px solid rgb(0, 126, 255);
+  box-shadow: rgb(227, 233, 243) 0px 2px 4px 0px;
+
+  &-group {
+    padding-bottom: 2.7rem;
+  }
+
+  &-label {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  &-input {
+    position: relative;
+
+    & > input {
+      width: 100%;
+      padding: 1rem 1.5rem 1rem 4.5rem;
+
+      border: 1px solid rgb(227, 233, 243);
+      border-radius: 2px;
+      outline: none;
+
+      font-family: inherit;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: rgb(51, 55, 64);
+
+      &::placeholder {
+        color: rgb(179, 181, 185);
+      }
+
+      &:focus {
+        border-color: rgb(120, 202, 255);
+      }
+    }
+
+    & > svg {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+
+      font-size: 1.8rem;
+      color: rgb(179, 181, 185);
+    }
+
+    & > input[type='password'] {
+      padding-left: 1.5rem;
+
+      & + svg {
+        right: 1rem;
+        left: auto;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &-input-checkbox {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+
+    transform: scale(1.2);
+
+    & + label {
+      display: inline-block;
+      margin-left: 1rem;
+      margin-bottom: 0;
+
+      cursor: pointer;
+    }
+  }
+
+  &-button {
+    width: 100%;
+    padding: 0.5rem;
+    border: 0;
+    border-radius: 2px;
+
+    text-transform: uppercase;
+    outline: none;
+    background-color: rgb(0, 126, 255);
+
+    color: #fff;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 1.4rem;
+
+    cursor: pointer;
+  }
+}

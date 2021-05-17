@@ -1,7 +1,7 @@
 import Home from 'components/Home';
 import NotFound from 'components/NotFound';
-import Login from 'features/Auth/pages/Login';
-import Signup from 'features/Auth/pages/Signup';
+import LoginPage from 'features/Auth/pages/LoginPage';
+import SignupPage from 'features/Auth/pages/SignupPage';
 import Note from 'features/Note';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
@@ -12,8 +12,8 @@ function App() {
         <Switch>
           <Route exact path='/' component={Home} />
 
-          <Route path='/login' component={Login} />
-          <Route path='/signup' component={Signup} />
+          <Route path='/login' component={LoginPage} />
+          <Route path='/signup' component={SignupPage} />
 
           <Route path='/:username' component={Note} />
 

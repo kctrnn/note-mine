@@ -1,0 +1,25 @@
+.logo {
+  padding-top: 8rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-icon {
+    font-size: 3rem !important;
+    margin-right: 1rem;
+  }
+
+  &-text {
+    font-size: 3rem;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.54);
+    letter-spacing: 1.5px;
+    font-weight: 600;
+
+    & > strong {
+      font-weight: 600;
+      color: #3f51b5;
+    }
+  }
+}
