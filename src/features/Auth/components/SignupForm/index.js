@@ -1,13 +1,15 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
 import InputField from 'components/form-controls/InputField';
 import PasswordField from 'components/form-controls/PasswordField';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import './LoginForm.scss';
+import './SignupForm.scss';
 
-const LoginForm = (props) => {
+const SignupForm = (props) => {
   const form = useForm({
     defaultValues: {
-      identifier: '',
+      username: '',
+      email: '',
       password: '',
     },
   });
@@ -18,8 +20,24 @@ const LoginForm = (props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='form'>
+      <div className='form-name'>
+        <InputField
+          name='fullname'
+          label='Full name'
+          form={form}
+          placeholder='Hyun Bin'
+        />
+
+        <InputField
+          name='username'
+          label='User name'
+          form={form}
+          placeholder='hyunbin'
+        />
+      </div>
+
       <InputField
-        name='identifier'
+        name='email'
         label='Email'
         form={form}
         placeholder='hyun@bin.com'
@@ -33,7 +51,13 @@ const LoginForm = (props) => {
         type='password'
       />
 
-      {/* Remember me */}
+      <PasswordField
+        name='re-password'
+        label='Confirmation Password'
+        form={form}
+        type='password'
+      />
+
       <div className='form-group'>
         <input
           type='checkbox'
@@ -43,17 +67,17 @@ const LoginForm = (props) => {
         />
 
         <label className='form-label' htmlFor='rememberMe'>
-          Remember me
+          Accept the term and the privacy policy
         </label>
       </div>
 
       <button type='submit' className='form-button'>
-        Log in
+        Let's start
       </button>
     </form>
   );
 };
 
-LoginForm.propTypes = {};
+SignupForm.propTypes = {};
 
-export default LoginForm;
+export default SignupForm;

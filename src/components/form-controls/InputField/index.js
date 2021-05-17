@@ -14,7 +14,9 @@ const InputField = (props) => {
       </label>
 
       <div className='form-input'>
-        <AlternateEmailIcon />
+        <span>
+          <AlternateEmailIcon />
+        </span>
 
         <Controller
           name={name}

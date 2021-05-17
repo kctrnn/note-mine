@@ -7,6 +7,10 @@ const LoginPage = () => {
     <div>
       <Logo />
       <LoginForm />
+
+      <p style={{ fontWeight: '400', textAlign: 'center' }}>
+        Forgot your password?
+      </p>
     </div>
   );
 };

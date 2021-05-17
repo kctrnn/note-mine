@@ -28,7 +28,9 @@ const PasswordField = (props) => {
           )}
         />
 
-        <VisibilityIcon />
+        <span>
+          <VisibilityIcon />
+        </span>
       </div>
     </div>
   );

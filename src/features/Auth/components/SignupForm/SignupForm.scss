@@ -1,0 +1,22 @@
+.form {
+  &-name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &-name > &-group:first-child {
+    flex-basis: 80%;
+    margin-right: 2rem;
+  }
+
+  &-name > &-group > &-input {
+    & > input {
+      padding-left: 1.5rem;
+    }
+
+    & > span {
+      display: none;
+    }
+  }
+}
