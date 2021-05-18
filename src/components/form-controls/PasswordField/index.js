@@ -1,11 +1,13 @@
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
 
 const PasswordField = (props) => {
   const { form, label, name, type, placeholder } = props;
   const { control } = form;
+
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className='form-group'>
@@ -21,14 +23,15 @@ const PasswordField = (props) => {
             <input
               {...field}
               id={name}
-              type={type}
+              type={showPassword ? 'text' : type}
               placeholder={placeholder}
               autoComplete='off'
+              className='password'
             />
           )}
         />
 
-        <span>
+        <span onClick={() => setShowPassword((x) => !x)}>
           <VisibilityIcon />
         </span>
       </div>
