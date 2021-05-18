@@ -2,6 +2,7 @@ import InputField from 'components/form-controls/InputField';
 import PasswordField from 'components/form-controls/PasswordField';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import './LoginForm.scss';
 
 const LoginForm = (props) => {
@@ -32,6 +33,10 @@ const LoginForm = (props) => {
         form={form}
         type='password'
       />
+
+      <Link className='form-forgot' to='/forgot-password'>
+        Forgot your password?
+      </Link>
 
       {/* Remember me */}
       <div className='form-group'>
