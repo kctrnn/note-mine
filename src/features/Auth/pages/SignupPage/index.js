@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const SignupPage = (props) => {
   return (
-    <div>
+    <div className='auth-signup' style={{ paddingTop: '8rem' }}>
       <Logo />
       <SignupForm />
 

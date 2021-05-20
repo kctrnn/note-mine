@@ -6,7 +6,7 @@ import ForgotPasswordForm from 'features/Auth/components/ForgotPasswordForm';
 
 const ForgotPasswordPage = (props) => {
   return (
-    <div>
+    <div className='auth-forgot' style={{ paddingTop: '8rem' }}>
       <Logo />
       <ForgotPasswordForm />
 

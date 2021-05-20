@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
   return (
-    <div>
+    <div className='auth-login' style={{ paddingTop: '8rem' }}>
       <Logo />
       <LoginForm />
 
