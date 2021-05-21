@@ -1,24 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import Logo from 'components/Logo';
-import { Link } from 'react-router-dom';
 import ForgotPasswordForm from 'features/Auth/components/ForgotPasswordForm';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const ForgotPasswordPage = (props) => {
+const ForgotPasswordPage = () => {
   return (
     <div className='auth-forgot' style={{ paddingTop: '8rem' }}>
       <Logo />
       <ForgotPasswordForm />
 
       <p style={{ fontWeight: '400', textAlign: 'center' }}>
-        <Link to='/login' style={{ color: 'rgb(41, 43, 44)' }}>
+        <Link to='/login' tabIndex='-1' style={{ color: 'rgb(41, 43, 44)' }}>
           Ready to sign in?
         </Link>
       </p>
     </div>
   );
 };
-
-ForgotPasswordPage.propTypes = {};
 
 export default ForgotPasswordPage;

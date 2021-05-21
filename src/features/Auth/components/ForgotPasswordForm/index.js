@@ -1,15 +1,28 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import InputField from 'components/form-controls/InputField';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .required('Please enter your email')
+    .email('Please enter a valid email address'),
+});
 
 const ForgotPasswordForm = (props) => {
   const form = useForm({
     defaultValues: {
       email: '',
     },
+    resolver: yupResolver(schema),
   });
 
-  const { handleSubmit } = form;
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = form;
 
   const onSubmit = (data) => console.log(data);
 
@@ -23,7 +36,7 @@ const ForgotPasswordForm = (props) => {
         type='email'
       />
 
-      <button type='submit' className='form-button'>
+      <button type='submit' className='form-button' disabled={isSubmitting}>
         Send email
       </button>
     </form>

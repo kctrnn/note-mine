@@ -1,8 +1,6 @@
 .form {
-  position: relative;
-
-  margin: 2.5rem auto;
   max-width: 42rem;
+  margin: 2.5rem auto;
   padding: 4rem 3rem 2.5rem;
 
   border-top: 2px solid rgb(0, 126, 255);
@@ -13,10 +11,11 @@
   }
 
   &-label {
-    display: block;
+    display: inline-block;
     margin-bottom: 1rem;
   }
 
+  // INPUT FIELD
   &-input {
     position: relative;
 
@@ -60,6 +59,7 @@
       }
     }
 
+    // PASSWORD FIELD
     & > input.password {
       padding-left: 1.5rem;
       padding-right: 4.5rem;
@@ -75,12 +75,14 @@
     }
   }
 
-  &-input-checkbox {
+  // CHECKBOX FIELD
+  &-group > input {
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
 
     transform: scale(1.2);
+    outline: none;
 
     & + label {
       display: inline-block;
@@ -109,10 +111,18 @@
     cursor: pointer;
   }
 
+  &-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
   &-forgot {
-    position: absolute;
-    top: 13.5rem;
-    right: 3rem;
     font-weight: 400;
+  }
+
+  &-error {
+    color: #dc3545;
+    margin-top: 1rem;
+    font-size: 1.2rem;
   }
 }

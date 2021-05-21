@@ -1,9 +1,42 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import CheckboxField from 'components/form-controls/CheckboxField';
 import InputField from 'components/form-controls/InputField';
 import PasswordField from 'components/form-controls/PasswordField';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 import './SignupForm.scss';
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .required('This value is required.')
+    .email('Please enter a valid email address'),
+
+  password: yup
+    .string()
+    .required('This value is required.')
+    .min(6, 'Please enter at least 6 characters.'),
+
+  rePassword: yup
+    .string()
+    .required('This value is required.')
+    .oneOf([yup.ref('password')], 'Password does not match.'),
+
+  fullname: yup
+    .string()
+    .required('This value is required.')
+    .test(
+      'should has at least two words',
+      'Please enter at least two words.',
+      (value) => {
+        return value.split(' ').length >= 2;
+      }
+    ),
+
+  username: yup.string().required('This value is required.'),
+  accept: yup.bool().isTrue('Please accept the term and the privacy policy.'),
+});
 
 const SignupForm = (props) => {
   const form = useForm({
@@ -11,10 +44,17 @@ const SignupForm = (props) => {
       username: '',
       email: '',
       password: '',
+      rePassword: '',
+      fullname: '',
+      accept: false,
     },
+    resolver: yupResolver(schema),
   });
 
-  const { handleSubmit } = form;
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = form;
 
   const onSubmit = (data) => console.log(data);
 
@@ -52,26 +92,19 @@ const SignupForm = (props) => {
       />
 
       <PasswordField
-        name='re-password'
+        name='rePassword'
         label='Confirmation Password'
         form={form}
         type='password'
       />
 
-      <div className='form-group'>
-        <input
-          type='checkbox'
-          className='form-input-checkbox'
-          id='rememberMe'
-          name='rememberMe'
-        />
+      <CheckboxField
+        name='accept'
+        label='Accept the term and the privacy policy'
+        form={form}
+      />
 
-        <label className='form-label' htmlFor='rememberMe'>
-          Accept the term and the privacy policy
-        </label>
-      </div>
-
-      <button type='submit' className='form-button'>
+      <button type='submit' className='form-button' disabled={isSubmitting}>
         Let's start
       </button>
     </form>

@@ -1,3 +1,4 @@
+import { ErrorMessage } from '@hookform/error-message';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -5,7 +6,10 @@ import { Controller } from 'react-hook-form';
 
 const InputField = (props) => {
   const { form, label, name, type, placeholder } = props;
-  const { control } = form;
+  const {
+    control,
+    formState: { errors },
+  } = form;
 
   return (
     <div className='form-group'>
@@ -33,6 +37,12 @@ const InputField = (props) => {
           )}
         />
       </div>
+
+      <ErrorMessage
+        errors={errors}
+        name={name}
+        render={({ message }) => <p className='form-error'>{message}</p>}
+      />
     </div>
   );
 };

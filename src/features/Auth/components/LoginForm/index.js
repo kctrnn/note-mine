@@ -1,9 +1,19 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import CheckboxField from 'components/form-controls/CheckboxField';
 import InputField from 'components/form-controls/InputField';
 import PasswordField from 'components/form-controls/PasswordField';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import * as yup from 'yup';
 import './LoginForm.scss';
+
+const schema = yup.object().shape({
+  identifier: yup
+    .string()
+    .required('Please enter your email')
+    .email('Please enter a valid email address'),
+  password: yup.string().required('Please enter your password'),
+});
 
 const LoginForm = (props) => {
   const form = useForm({
@@ -11,9 +21,13 @@ const LoginForm = (props) => {
       identifier: '',
       password: '',
     },
+    resolver: yupResolver(schema),
   });
 
-  const { handleSubmit } = form;
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = form;
 
   const onSubmit = (data) => console.log(data);
 
@@ -32,27 +46,12 @@ const LoginForm = (props) => {
         label='Password'
         form={form}
         type='password'
+        isForgotMode
       />
 
-      <Link className='form-forgot' to='/forgot-password'>
-        Forgot your password?
-      </Link>
+      <CheckboxField name='rememberMe' label='Remember me' form={form} />
 
-      {/* Remember me */}
-      <div className='form-group'>
-        <input
-          type='checkbox'
-          className='form-input-checkbox'
-          id='rememberMe'
-          name='rememberMe'
-        />
-
-        <label className='form-label' htmlFor='rememberMe'>
-          Remember me
-        </label>
-      </div>
-
-      <button type='submit' className='form-button'>
+      <button type='submit' className='form-button' disabled={isSubmitting}>
         Log in
       </button>
     </form>

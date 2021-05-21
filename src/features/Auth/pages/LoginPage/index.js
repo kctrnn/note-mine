@@ -10,7 +10,10 @@ const LoginPage = () => {
       <LoginForm />
 
       <p style={{ fontWeight: '400', textAlign: 'center' }}>
-        Not a member? <Link to='/signup'>Sign Up</Link>
+        Not a member?{' '}
+        <Link to='/signup' tabIndex='-1'>
+          Sign Up
+        </Link>
       </p>
     </div>
   );
