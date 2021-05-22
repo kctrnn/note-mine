@@ -73,6 +73,12 @@
         cursor: pointer;
       }
     }
+
+    &.is-invalid {
+      & > input {
+        border-color: #dc3545;
+      }
+    }
   }
 
   // CHECKBOX FIELD

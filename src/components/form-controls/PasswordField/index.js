@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import classNames from 'classnames';
 
 const PasswordField = (props) => {
   const { form, label, name, type, placeholder, isForgotMode } = props;
@@ -13,6 +14,10 @@ const PasswordField = (props) => {
   } = form;
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const formInputClass = classNames('form-input', {
+    [`is-invalid`]: !!errors[name],
+  });
 
   return (
     <div className='form-group'>
@@ -28,7 +33,7 @@ const PasswordField = (props) => {
         )}
       </div>
 
-      <div className='form-input'>
+      <div className={formInputClass}>
         <Controller
           name={name}
           control={control}

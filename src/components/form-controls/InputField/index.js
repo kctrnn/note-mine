@@ -3,6 +3,7 @@ import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Controller } from 'react-hook-form';
+import classNames from 'classnames';
 
 const InputField = (props) => {
   const { form, label, name, type, placeholder } = props;
@@ -11,13 +12,17 @@ const InputField = (props) => {
     formState: { errors },
   } = form;
 
+  const formInputClass = classNames('form-input', {
+    [`is-invalid`]: !!errors[name],
+  });
+
   return (
     <div className='form-group'>
       <label className='form-label' htmlFor={name}>
         {label}
       </label>
 
-      <div className='form-input'>
+      <div className={formInputClass}>
         <span>
           <AlternateEmailIcon />
         </span>
