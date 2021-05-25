@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import MainPage from './pages/MainPage';
 
 const Note = (props) => {
-  return <div>Noteeeeee</div>;
+  return <MainPage />;
 };
 
 Note.propTypes = {};

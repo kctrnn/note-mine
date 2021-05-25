@@ -3,25 +3,30 @@ import NotFound from 'components/NotFound';
 import ForgotPasswordPage from 'features/Auth/pages/ForgotPasswordPage';
 import LoginPage from 'features/Auth/pages/LoginPage';
 import SignupPage from 'features/Auth/pages/SignupPage';
-import Note from 'features/Note';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+// Lazy load - Code splitting
+const Note = React.lazy(() => import('./features/Note'));
 
 function App() {
   return (
     <div className='note-mine-app'>
-      <Router>
-        <Switch>
-          <Route exact path='/' component={Home} />
+      <Suspense fallback={<div>Loading ...</div>}>
+        <Router>
+          <Switch>
+            <Route exact path='/' component={Home} />
 
-          <Route path='/login' component={LoginPage} />
-          <Route path='/signup' component={SignupPage} />
-          <Route path='/forgot-password' component={ForgotPasswordPage} />
+            <Route path='/login' component={LoginPage} />
+            <Route path='/signup' component={SignupPage} />
+            <Route path='/forgot-password' component={ForgotPasswordPage} />
 
-          <Route path='/:username' component={Note} />
+            <Route path='/:username' component={Note} />
 
-          <Route component={NotFound} />
-        </Switch>
-      </Router>
+            <Route component={NotFound} />
+          </Switch>
+        </Router>
+      </Suspense>
     </div>
   );
 }
