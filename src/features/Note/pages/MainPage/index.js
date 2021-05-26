@@ -6,10 +6,14 @@ import NotePage from 'features/Note/components/NotePage';
 
 const MainPage = (props) => {
   const tags = ['welcome', 'code', 'music'];
+  const user = {
+    userName: 'kctrnn',
+    avatar: '',
+  };
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      <Sidebar tagList={tags} />
+      <Sidebar tagList={tags} user={user} />
 
       <NoteList />
 
