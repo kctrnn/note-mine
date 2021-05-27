@@ -54,6 +54,15 @@ const Home = () => {
               <p className='person-position'>Member</p>
             </div>
           </div>
+
+          <div className='my-team-person'>
+            <img className='person-avatar' src={Images.NIAL_AVT} alt='' />
+
+            <div className='person-info'>
+              <p className='person-name'>Le Nhu Hieu</p>
+              <p className='person-position'>Member</p>
+            </div>
+          </div>
         </div>
 
         <div className='line-text'>
