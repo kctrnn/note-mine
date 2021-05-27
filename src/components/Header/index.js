@@ -1,10 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import Logo from 'components/Logo';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import './Header.scss';
 
-const Header = (props) => {
+const Header = () => {
   return (
     <div className='header'>
       <nav className='navbar'>
@@ -24,7 +23,5 @@ const Header = (props) => {
     </div>
   );
 };
-
-Header.propTypes = {};
 
 export default Header;

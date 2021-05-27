@@ -28,37 +28,37 @@ const Sidebar = ({ tagList, user }) => {
 
       <div className='sidebar-menu'>
         <div className='dropdown'>
-          <Link className={dropdownToggleClass}>
+          <Link to='' className={dropdownToggleClass}>
             <NotesIcon fontSize='large' />
             Notes
             <ArrowForwardIosIcon onClick={handleDropdownToggleClick} />
           </Link>
 
           <div className={dropdownMenuClass}>
-            <Link className='dropdown-item'>
+            <Link to='' className='dropdown-item'>
               <NotesIcon fontSize='large' />
               Untagged
             </Link>
-            <Link className='dropdown-item'>
+            <Link to='' className='dropdown-item'>
               <NotesIcon fontSize='large' />
               Todo
             </Link>
-            <Link className='dropdown-item'>
+            <Link to='' className='dropdown-item'>
               <NotesIcon fontSize='large' />
               Locked
             </Link>
           </div>
         </div>
 
-        <Link className='menu-link active'>
+        <Link to='' className='menu-link active'>
           <DeleteOutlineIcon fontSize='large' />
           Trash
         </Link>
       </div>
 
       <div className='sidebar-menu'>
-        {tagList.map((tag) => (
-          <Link className='menu-link'>
+        {tagList.map((tag, index) => (
+          <Link key={index} className='menu-link' to=''>
             <CodeIcon fontSize='large' />
             {tag}
           </Link>
