@@ -5,6 +5,7 @@ import React from 'react';
 
 const MainPage = () => {
   const tags = ['welcome', 'code', 'music'];
+
   const user = {
     userName: 'kctrnn',
     avatar: '',

@@ -1,0 +1,8 @@
+.block {
+  padding: 0.25rem;
+
+  &:focus {
+    background: #f5f6fb;
+    outline-color: #f5f6fb;
+  }
+}
