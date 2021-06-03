@@ -1,18 +1,20 @@
 import usePrevious from 'hooks/usePrevious';
 import React, { useEffect, useState } from 'react';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import uid from 'utils/uid';
 import NoteBlock from '../NoteBlock';
 import './NotePage.scss';
 
 const initBlocks = [
-  { id: uid(), html: 'Welcome to kctrnn', tag: 'h1' },
+  { id: uid(), html: 'Welcome to Note Mine', tag: 'h1' },
   { id: uid(), html: 'I am <b>kctrnn</b>', tag: 'h2' },
-  { id: uid(), html: '<i>Fucking coding</i>', tag: 'p' },
+  { id: uid(), html: '<i>This is paragraph</i>', tag: 'p' },
 ];
 
-const NotePage = () => {
+const NotePage = ({ id }) => {
   const [blocks, setBlocks] = useState(initBlocks);
   const [currentBlockId, setCurrentBlockId] = useState(null);
+
   const prevBlocks = usePrevious(blocks);
 
   // Handling the cursor and focus on adding and deleting blocks
@@ -74,21 +76,52 @@ const NotePage = () => {
     setBlocks(updatedBlocks);
   };
 
+  const handleDragEnd = (result) => {
+    const { destination, source } = result;
+
+    if (!destination || destination.index === source.index) {
+      return;
+    }
+
+    const updatedBlocks = [...blocks];
+    const removedBlocks = updatedBlocks.splice(source.index - 1, 1);
+    updatedBlocks.splice(destination.index - 1, 0, removedBlocks[0]);
+
+    setBlocks(updatedBlocks);
+  };
+
   return (
-    <div className='note-page'>
-      {blocks.map((block, index) => (
-        <NoteBlock
-          key={block.id}
-          id={block.id}
-          tag={block.tag}
-          html={block.html}
-          updatePage={updatePageHandler}
-          addBlock={addBlockHandler}
-          deleteBlock={deleteBlockHandler}
-          position={index + 1}
-        />
-      ))}
-    </div>
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <Droppable droppableId={id}>
+        {(provided, snapshot) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className='note-page'
+          >
+            {blocks.map((block) => {
+              const position =
+                blocks.map((block) => block.id).indexOf(block.id) + 1;
+
+              return (
+                <NoteBlock
+                  key={block.id}
+                  id={block.id}
+                  position={position}
+                  tag={block.tag}
+                  html={block.html}
+                  updatePage={updatePageHandler}
+                  addBlock={addBlockHandler}
+                  deleteBlock={deleteBlockHandler}
+                />
+              );
+            })}
+
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 };
 

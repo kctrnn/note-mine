@@ -1,0 +1,40 @@
+.action-menu {
+  position: absolute;
+
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+
+  background-color: #fff;
+  box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px,
+    rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
+
+  & > * {
+    cursor: pointer;
+    min-width: 6rem;
+    height: 100%;
+    padding: 0.5rem 1rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      background-color: #f5f6fb;
+    }
+  }
+}
+
+.action-menu > .turn-into {
+  font-weight: 600;
+  border-right: 1px solid #ededed;
+
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.action-menu > .delete {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}

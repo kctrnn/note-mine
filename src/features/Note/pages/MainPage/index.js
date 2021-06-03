@@ -37,7 +37,7 @@ const MainPage = () => {
 
       <NoteList noteList={notes} />
 
-      <NotePage />
+      <NotePage id='213' />
     </div>
   );
 };

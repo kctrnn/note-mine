@@ -1,8 +1,50 @@
 .block {
-  padding: 0.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-  &:focus {
+  padding: 0.5rem;
+
+  &:hover > &-text {
     background: #f5f6fb;
     outline-color: #f5f6fb;
+  }
+
+  &:hover > &-icon {
+    opacity: 1;
+  }
+
+  &.isDragging > &-icon {
+    opacity: 1;
+  }
+
+  &.isDragging > &-text {
+    background: #f5f6fb;
+    outline-color: #f5f6fb;
+  }
+
+  &-text {
+    padding: 0.25rem;
+    flex: 1;
+
+    // Better support for safari
+    -webkit-user-select: text;
+    user-select: text;
+
+    &:focus {
+      background: #f5f6fb;
+      outline-color: #f5f6fb;
+
+      & + span {
+        opacity: 1;
+      }
+    }
+  }
+
+  &-icon {
+    opacity: 0;
+    color: #777;
+    padding: 1rem;
+    margin-left: 1rem;
   }
 }
