@@ -24,6 +24,7 @@ class NoteBlock extends React.Component {
     this.openActionMenu = this.openActionMenu.bind(this);
     this.closeActionMenu = this.closeActionMenu.bind(this);
     this.handleTurnIntoClick = this.handleTurnIntoClick.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
 
     this.contentEditable = React.createRef();
 
@@ -41,22 +42,36 @@ class NoteBlock extends React.Component {
         x: null,
         y: null,
       },
+
+      isTyping: false,
     };
   }
 
   componentDidMount() {
-    this.setState({ html: this.props.html, tag: this.props.tag });
+    this.setState({
+      ...this.state,
+      html: this.props.html,
+      tag: this.props.tag,
+      imageUrl: this.props.imageUrl,
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const htmlChanged = prevState.html !== this.state.html;
-    const tagChanged = prevState.tag !== this.state.tag;
+    // update the page on the server if one of the following is true
+    // 1. user stopped typing and the html content has changed & no placeholder set
+    // 2. user changed the tag & no placeholder set
+    // 3. user changed the image & no placeholder set
+    const stoppedTyping = prevState.isTyping && !this.state.isTyping;
+    const htmlChanged = this.props.html !== this.state.html;
+    const tagChanged = this.props.tag !== this.state.tag;
+    const imageChanged = this.props.imageUrl !== this.state.imageUrl;
 
-    if (htmlChanged || tagChanged) {
-      this.props.updatePage({
+    if ((stoppedTyping && htmlChanged) || tagChanged || imageChanged) {
+      this.props.updateBlock({
         id: this.props.id,
         html: this.state.html,
         tag: this.state.tag,
+        imageUrl: this.state.imageUrl,
       });
     }
   }
@@ -66,7 +81,11 @@ class NoteBlock extends React.Component {
   }
 
   onChangeHandler(e) {
-    this.setState({ html: e.target.value });
+    this.setState({ ...this.state, html: e.target.value });
+  }
+
+  handleBlur(e) {
+    this.setState({ ...this.state, isTyping: false });
   }
 
   onKeyDownHandler(e) {
@@ -74,15 +93,17 @@ class NoteBlock extends React.Component {
       this.setState({ htmlBackup: this.state.html });
     }
 
-    if (e.key === 'Enter') {
-      if (this.state.previousKey !== 'Shift') {
-        e.preventDefault();
+    if (
+      e.key === 'Enter' &&
+      this.state.previousKey !== 'Shift' &&
+      !this.state.selectMenuIsOpen
+    ) {
+      e.preventDefault();
 
-        this.props.addBlock({
-          id: this.props.id,
-          ref: this.contentEditable.current,
-        });
-      }
+      this.props.addBlock({
+        id: this.props.id,
+        ref: this.contentEditable.current,
+      });
     }
 
     this.setState({ previousKey: e.key });
@@ -183,36 +204,52 @@ class NoteBlock extends React.Component {
           />
         )}
 
-        <Draggable draggableId={this.props.id} index={this.props.position}>
-          {(provided, snapshot) => (
-            <div
-              className={classNames('block', {
-                isDragging: snapshot.isDragging,
-              })}
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-            >
-              <ContentEditable
-                className='block-text'
-                innerRef={this.contentEditable}
-                html={this.state.html}
-                tagName={this.state.tag}
-                onChange={this.onChangeHandler}
-                onKeyDown={this.onKeyDownHandler}
-                onKeyUp={this.onKeyUpHandler}
-                data-position={this.props.position}
-              />
+        {this.props.position === 1 && (
+          <ContentEditable
+            className='block-text title'
+            innerRef={this.contentEditable}
+            html={this.state.html}
+            tagName={this.state.tag}
+            onChange={this.onChangeHandler}
+            // onKeyDown={this.onKeyDownHandler}
+            // onKeyUp={this.onKeyUpHandler}
+            data-position={this.props.position}
+          />
+        )}
 
-              <span
-                className='block-icon'
-                onClick={this.handleDragIconClick}
-                {...provided.dragHandleProps}
+        {this.props.position !== 1 && (
+          <Draggable draggableId={this.props.id} index={this.props.position}>
+            {(provided, snapshot) => (
+              <div
+                className={classNames('block', {
+                  isDragging: snapshot.isDragging,
+                })}
+                ref={provided.innerRef}
+                {...provided.draggableProps}
               >
-                <img src={Icons.DRAG_ICON} alt='drag-icon' />
-              </span>
-            </div>
-          )}
-        </Draggable>
+                <ContentEditable
+                  className='block-text'
+                  innerRef={this.contentEditable}
+                  html={this.state.html}
+                  tagName={this.state.tag}
+                  onChange={this.onChangeHandler}
+                  onKeyDown={this.onKeyDownHandler}
+                  onKeyUp={this.onKeyUpHandler}
+                  data-position={this.props.position}
+                  onBlur={this.handleBlur}
+                />
+
+                <span
+                  className='block-icon'
+                  onClick={this.handleDragIconClick}
+                  {...provided.dragHandleProps}
+                >
+                  <img src={Icons.DRAG_ICON} alt='drag-icon' />
+                </span>
+              </div>
+            )}
+          </Draggable>
+        )}
       </div>
     );
   }

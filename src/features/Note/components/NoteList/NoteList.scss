@@ -12,6 +12,8 @@
   align-items: flex-start;
 
   &-content {
+    flex: 1;
+
     padding-bottom: 2rem;
     padding-right: 1rem;
     border-bottom: 1px solid #999;
@@ -33,6 +35,12 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    & i,
+    b {
+      font-style: normal;
+      font-weight: 400;
+    }
   }
 
   &-time {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './NoteList.scss';
 import CreateIcon from '@material-ui/icons/Create';
 import SearchIcon from '@material-ui/icons/Search';
+import ContentEditable from 'react-contenteditable';
 
 const NoteList = ({ noteList }) => {
   return (
@@ -22,7 +23,11 @@ const NoteList = ({ noteList }) => {
 
           <div className='note-content'>
             <p className='note-title'>{note.title}</p>
-            <p className='note-text'>{note.content}</p>
+            <div className='note-text'>
+              {note.htmlBlocks.map((htmlBlock, index) => (
+                <ContentEditable key={index} html={htmlBlock} disabled />
+              ))}
+            </div>
           </div>
         </div>
       ))}

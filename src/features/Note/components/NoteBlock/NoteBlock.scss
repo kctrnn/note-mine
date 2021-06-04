@@ -1,9 +1,13 @@
+.note-block {
+  margin-left: 2rem;
+}
+
 .block {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  padding: 0.5rem;
+  padding: 0.25rem;
 
   &:hover > &-text {
     background: #f5f6fb;
@@ -38,6 +42,32 @@
       & + span {
         opacity: 1;
       }
+    }
+  }
+
+  &-text.title {
+    position: relative;
+
+    max-width: calc(100% - 3.6rem);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+    &::before {
+      content: 'H1';
+      position: absolute;
+      top: 50%;
+      left: -2.5rem;
+      transform: translateY(-50%);
+
+      font-family: inherit;
+      font-weight: 400;
+      font-size: 1.6rem;
+      color: #777;
+    }
+
+    &:hover {
+      background: #f5f6fb;
+      outline-color: #f5f6fb;
     }
   }
 

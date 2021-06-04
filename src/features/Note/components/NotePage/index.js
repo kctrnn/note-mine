@@ -1,21 +1,25 @@
 import usePrevious from 'hooks/usePrevious';
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import setCaretToEnd from 'utils/setCaretToEnd';
 import uid from 'utils/uid';
 import NoteBlock from '../NoteBlock';
 import './NotePage.scss';
 
-const initBlocks = [
-  { id: uid(), html: 'Welcome to Note Mine', tag: 'h1' },
-  { id: uid(), html: 'I am <b>kctrnn</b>', tag: 'h2' },
-  { id: uid(), html: '<i>This is paragraph</i>', tag: 'p' },
-];
+// const initBlocks = [
+//   { id: uid(), html: 'Welcome to Note Mine', tag: 'h1' },
+//   { id: uid(), html: 'I am <b>kctrnn</b>', tag: 'h2' },
+//   { id: uid(), html: '<i>This is paragraph</i>', tag: 'p' },
+// ];
 
-const NotePage = ({ id }) => {
-  const [blocks, setBlocks] = useState(initBlocks);
+const NotePage = ({ id, fetchedBlocks }) => {
+  const [blocks, setBlocks] = useState(fetchedBlocks);
   const [currentBlockId, setCurrentBlockId] = useState(null);
 
   const prevBlocks = usePrevious(blocks);
+
+  // Update the database whenever blocks change
+  // useEffect(() => {});
 
   // Handling the cursor and focus on adding and deleting blocks
   useEffect(() => {
@@ -34,9 +38,25 @@ const NotePage = ({ id }) => {
     }
 
     // If a block was deleted, move the caret to the end of the last block
+    if (prevBlocks?.length - 1 === blocks.length) {
+      const lastBlockPosition = prevBlocks
+        .map((block) => block.id)
+        .indexOf(currentBlockId);
+
+      console.log(lastBlockPosition);
+
+      const lastBlock = document.querySelector(
+        `[data-position="${lastBlockPosition}"]`
+      );
+      console.log(lastBlock);
+
+      if (lastBlock) {
+        setCaretToEnd(lastBlock);
+      }
+    }
   }, [blocks, currentBlockId, prevBlocks]);
 
-  const updatePageHandler = (updatedBlock) => {
+  const updateBlockHandler = (updatedBlock) => {
     const updatedBlocks = blocks.map((block) => {
       if (block.id === updatedBlock.id) {
         return {
@@ -50,6 +70,7 @@ const NotePage = ({ id }) => {
     });
 
     setBlocks(updatedBlocks);
+    console.log(blocks);
   };
 
   const addBlockHandler = (currentBlock) => {
@@ -65,6 +86,8 @@ const NotePage = ({ id }) => {
   };
 
   const deleteBlockHandler = (currentBlock) => {
+    setCurrentBlockId(currentBlock.id);
+
     const index = blocks.map((block) => block.id).indexOf(currentBlock.id);
     const updatedBlocks = [...blocks];
 
@@ -110,9 +133,9 @@ const NotePage = ({ id }) => {
                   position={position}
                   tag={block.tag}
                   html={block.html}
-                  updatePage={updatePageHandler}
                   addBlock={addBlockHandler}
                   deleteBlock={deleteBlockHandler}
+                  updateBlock={updateBlockHandler}
                 />
               );
             })}
