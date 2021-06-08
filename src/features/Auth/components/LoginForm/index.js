@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import CheckboxField from 'components/form-controls/CheckboxField';
 import InputField from 'components/form-controls/InputField';
 import PasswordField from 'components/form-controls/PasswordField';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -15,7 +16,7 @@ const schema = yup.object().shape({
   password: yup.string().required('Please enter your password'),
 });
 
-const LoginForm = (props) => {
+const LoginForm = ({ onSubmit }) => {
   const form = useForm({
     defaultValues: {
       identifier: '',
@@ -29,7 +30,7 @@ const LoginForm = (props) => {
     formState: { isSubmitting },
   } = form;
 
-  const onSubmit = (data) => console.log(data);
+  // const onSubmit = (data) => console.log(data);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='form'>
@@ -58,6 +59,12 @@ const LoginForm = (props) => {
   );
 };
 
-LoginForm.propTypes = {};
+LoginForm.propTypes = {
+  onSubmit: PropTypes.func,
+};
+
+LoginForm.defaultProps = {
+  onSubmit: null,
+};
 
 export default LoginForm;
