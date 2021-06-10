@@ -11,9 +11,8 @@ const Home = () => {
       <section className='my-team'>
         <h1 className='my-team-title'>Welcome to my team</h1>
         <p className='my-team-description'>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sapiente non
-          consectetur fugit corrupti, ratione vero soluta illo hic modi amet,
-          beatae similique! Quae nesciunt beatae sunt iure. Harum, cumque alias.
+          We are a team gathered to do a fun project in the CMU-CS 447 JIS
+          subject by lecturer Nguyen Chien Thang
         </p>
         <p className='my-team-latest'>
           Our latest project is <span>NoteMine</span>
