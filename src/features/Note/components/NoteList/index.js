@@ -8,7 +8,7 @@ import ContentEditable from 'react-contenteditable';
 const NoteList = ({ noteList }) => {
   return (
     <div className='note-list'>
-      <div className='header'>
+      <div className='note-list-header'>
         <div className='header-search'>
           <SearchIcon fontSize='large' />
           <input type='text' placeholder='Search Notes' />
