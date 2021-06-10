@@ -104,4 +104,15 @@
     max-width: 4rem;
     margin-right: 1rem;
   }
+
+  &-logout {
+    padding: 0.5rem 1rem;
+    background-color: #3f51b5;
+    border-radius: 8px;
+    color: #fff;
+
+    font-weight: 400;
+
+    cursor: pointer;
+  }
 }

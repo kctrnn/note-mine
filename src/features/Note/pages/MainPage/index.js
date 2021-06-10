@@ -5,11 +5,6 @@ import React from 'react';
 import uid from 'utils/uid';
 
 const MainPage = () => {
-  const user = {
-    userName: 'kctrnn',
-    avatar: '',
-  };
-
   // sample data
   const pages = [
     {
@@ -71,7 +66,7 @@ const MainPage = () => {
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
-      <Sidebar tagList={tags} user={user} />
+      <Sidebar tagList={tags} />
 
       <NoteList noteList={notes} />
 

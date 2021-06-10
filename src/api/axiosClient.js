@@ -11,7 +11,7 @@ const axiosClient = axios.create({
 });
 
 // Add a request interceptor
-axios.interceptors.request.use(
+axiosClient.interceptors.request.use(
   (config) => {
     const customHeaders = {};
 
@@ -32,7 +32,7 @@ axios.interceptors.request.use(
 );
 
 // Add a response interceptor
-axios.interceptors.response.use(
+axiosClient.interceptors.response.use(
   (response) => {
     if (response && response.data) {
       return response.data;

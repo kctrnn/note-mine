@@ -14,10 +14,15 @@ const LoginPage = () => {
     try {
       const action = login(values);
       const resultAction = await dispatch(action);
-      // console.log(resultAction);
 
-      unwrapResult(resultAction);
-      history.push('/');
+      const user = unwrapResult(resultAction);
+      const firstPageId = user.pages[0]?.pageId;
+
+      if (firstPageId) {
+        history.push(`/${user.username}/${firstPageId}`);
+      } else {
+        history.push(`/${user.username}`);
+      }
     } catch (error) {
       console.log('Failed to login:', error);
     }
