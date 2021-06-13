@@ -19,7 +19,11 @@ const NotePage = ({ id, fetchedBlocks }) => {
   const prevBlocks = usePrevious(blocks);
 
   // Update the database whenever blocks change
-  // useEffect(() => {});
+  useEffect(() => {
+    if (prevBlocks && prevBlocks !== blocks) {
+      console.log('BLOCKS: ', blocks);
+    }
+  }, [blocks, prevBlocks]);
 
   // Handling the cursor and focus on adding and deleting blocks
   useEffect(() => {
@@ -56,31 +60,35 @@ const NotePage = ({ id, fetchedBlocks }) => {
     }
   }, [blocks, currentBlockId, prevBlocks]);
 
-  const updateBlockHandler = (updatedBlock) => {
-    const updatedBlocks = blocks.map((block) => {
-      if (block.id === updatedBlock.id) {
-        return {
-          ...block,
-          tag: updatedBlock.tag,
-          html: updatedBlock.html,
-        };
-      }
+  const updateBlockHandler = (currentBlock) => {
+    const index = blocks.map((b) => b.id).indexOf(currentBlock.id);
+    const oldBlock = blocks[index];
+    const updatedBlocks = [...blocks];
 
-      return block;
-    });
+    updatedBlocks[index] = {
+      ...updatedBlocks[index],
+      tag: currentBlock.tag,
+      html: currentBlock.html,
+      imageUrl: currentBlock.imageUrl,
+    };
 
     setBlocks(updatedBlocks);
-    console.log(blocks);
   };
 
   const addBlockHandler = (currentBlock) => {
     setCurrentBlockId(currentBlock.id);
-
-    const newBlock = { id: uid(), html: '', tag: 'p' };
-    const index = blocks.map((block) => block.id).indexOf(currentBlock.id);
-
+    const index = blocks.map((b) => b.id).indexOf(currentBlock.id);
     const updatedBlocks = [...blocks];
+    const newBlock = { id: uid(), tag: 'p', html: '', imageUrl: '' };
+
     updatedBlocks.splice(index + 1, 0, newBlock);
+
+    updatedBlocks[index] = {
+      ...updatedBlocks[index],
+      tag: currentBlock.tag,
+      html: currentBlock.html,
+      imageUrl: currentBlock.imageUrl,
+    };
 
     setBlocks(updatedBlocks);
   };

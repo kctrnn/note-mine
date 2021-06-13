@@ -25,6 +25,7 @@ class NoteBlock extends React.Component {
     this.closeActionMenu = this.closeActionMenu.bind(this);
     this.handleTurnIntoClick = this.handleTurnIntoClick.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
 
     this.contentEditable = React.createRef();
 
@@ -62,6 +63,7 @@ class NoteBlock extends React.Component {
     // 2. user changed the tag & no placeholder set
     // 3. user changed the image & no placeholder set
     const stoppedTyping = prevState.isTyping && !this.state.isTyping;
+
     const htmlChanged = this.props.html !== this.state.html;
     const tagChanged = this.props.tag !== this.state.tag;
     const imageChanged = this.props.imageUrl !== this.state.imageUrl;
@@ -84,24 +86,29 @@ class NoteBlock extends React.Component {
     this.setState({ ...this.state, html: e.target.value });
   }
 
-  handleBlur(e) {
+  handleFocus() {
+    this.setState({ ...this.state, isTyping: true });
+  }
+
+  handleBlur() {
     this.setState({ ...this.state, isTyping: false });
   }
 
   onKeyDownHandler(e) {
     if (e.key === '/') {
       this.setState({ htmlBackup: this.state.html });
-    }
-
-    if (
+    } else if (
       e.key === 'Enter' &&
       this.state.previousKey !== 'Shift' &&
       !this.state.selectMenuIsOpen
     ) {
       e.preventDefault();
-
       this.props.addBlock({
         id: this.props.id,
+
+        html: this.state.html,
+        tag: this.state.tag,
+        imageUrl: this.state.imageUrl,
         ref: this.contentEditable.current,
       });
     }
@@ -117,6 +124,7 @@ class NoteBlock extends React.Component {
 
   openSelectMenuHandler() {
     this.setState({
+      ...this.state,
       selectMenuIsOpen: true,
     });
 
@@ -127,6 +135,7 @@ class NoteBlock extends React.Component {
 
   closeSelectMenuHandler() {
     this.setState({
+      ...this.state,
       htmlBackup: null,
       selectMenuIsOpen: false,
     });
@@ -135,10 +144,17 @@ class NoteBlock extends React.Component {
   }
 
   tagSelectionHandler(tag) {
-    this.setState({ tag: tag, html: this.state.htmlBackup }, () => {
-      setCaretToEnd(this.contentEditable.current);
-      this.closeSelectMenuHandler();
-    });
+    if (this.state.isTyping) {
+      // Update the tag and restore the html backup without the command
+      this.setState({ tag: tag, html: this.state.htmlBackup }, () => {
+        setCaretToEnd(this.contentEditable.current);
+        this.closeSelectMenuHandler();
+      });
+    } else {
+      this.setState({ ...this.state, tag: tag }, () => {
+        this.closeSelectMenuHandler();
+      });
+    }
   }
 
   calculateActionMenuPosition(parent) {
@@ -214,6 +230,8 @@ class NoteBlock extends React.Component {
             // onKeyDown={this.onKeyDownHandler}
             // onKeyUp={this.onKeyUpHandler}
             data-position={this.props.position}
+            onBlur={this.handleBlur}
+            onFocus={this.handleFocus}
           />
         )}
 
@@ -237,6 +255,7 @@ class NoteBlock extends React.Component {
                   onKeyUp={this.onKeyUpHandler}
                   data-position={this.props.position}
                   onBlur={this.handleBlur}
+                  onFocus={this.handleFocus}
                 />
 
                 <span
