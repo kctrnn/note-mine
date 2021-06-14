@@ -1,58 +1,39 @@
+import pageApi from 'api/pageApi';
 import NoteList from 'features/Note/components/NoteList';
 import NotePage from 'features/Note/components/NotePage';
 import Sidebar from 'features/Note/components/Sidebar';
-import React from 'react';
-import uid from 'utils/uid';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const MainPage = () => {
-  // sample data
-  const pages = [
-    {
-      blocks: [
-        { _id: uid(), html: 'Welcome to Note Mine', tag: 'h1' },
-        { _id: uid(), html: '<i>This is paragraph</i>', tag: 'p' },
-      ],
+  const { pageId } = useParams();
+  const [pageList, setPageList] = useState([]);
+  const [blocks, setBlocks] = useState([]);
 
-      hashtag: 'welcome',
-      user: {
-        userName: 'kctrnn',
-      },
-    },
+  useEffect(() => {
+    const fetchPageList = async () => {
+      try {
+        const response = await pageApi.getAll();
+        setPageList(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-    {
-      blocks: [
-        { _id: uid(), html: 'Welcome to Note Mine', tag: 'h1' },
-        { _id: uid(), html: 'I am <b>kctrnn</b>', tag: 'h2' },
-      ],
+    const fetchBlocks = async (pageId) => {
+      try {
+        const response = await pageApi.getById(pageId);
+        setBlocks(response[0].blocks);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-      hashtag: 'music',
-      user: {
-        userName: 'kctrnn',
-      },
-    },
+    fetchPageList();
+    fetchBlocks(pageId);
+  }, [setPageList, setBlocks, pageId]);
 
-    {
-      blocks: [
-        { id: uid(), html: 'Welcome to Note Mine', tag: 'h1' },
-        {
-          id: uid(),
-          html: 'Welcome and welcome welcome and welcome welcome and welcome welcome and welcome welcome and welcome welcome and welcome welcome and welcome',
-          tag: 'p',
-        },
-        { id: uid(), html: 'I am <b>kctrnn</b>', tag: 'h2' },
-        { id: uid(), html: '<i>This is paragraph</i>', tag: 'p' },
-      ],
-
-      hashtag: 'code',
-      user: {
-        userName: 'kctrnn',
-      },
-    },
-  ];
-
-  const tags = pages.map((page) => page.hashtag);
-
-  const notes = pages.map((page) => {
+  const noteList = pageList.map((page) => {
     const note = {
       title: page.blocks[0].html,
       htmlBlocks: page.blocks.map((block) => block.html),
@@ -62,15 +43,15 @@ const MainPage = () => {
     return note;
   });
 
-  const blocks = pages[2].blocks;
+  const tags = pageList.map((page) => page.hashtag);
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       <Sidebar tagList={tags} />
 
-      <NoteList noteList={notes} />
+      <NoteList noteList={noteList} />
 
-      <NotePage id='213' fetchedBlocks={blocks} />
+      <NotePage pageId={pageId} fetchedBlocks={blocks} />
     </div>
   );
 };
