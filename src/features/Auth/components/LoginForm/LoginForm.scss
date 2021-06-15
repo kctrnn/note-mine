@@ -115,6 +115,10 @@
     font-size: 1.4rem;
 
     cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+    }
   }
 
   &-header {

@@ -6,8 +6,9 @@ import uid from 'utils/uid';
 import NoteBlock from '../NoteBlock';
 import './NotePage.scss';
 import PropTypes from 'prop-types';
+import blockApi from 'api/blockApi';
 
-const NotePage = ({ pageId, fetchedBlocks }) => {
+const NotePage = ({ pageId, fetchedBlocks, pid }) => {
   const [blocks, setBlocks] = useState(fetchedBlocks);
   const [currentBlockId, setCurrentBlockId] = useState(null);
 
@@ -18,19 +19,20 @@ const NotePage = ({ pageId, fetchedBlocks }) => {
   }, [fetchedBlocks]);
 
   // Update the database whenever blocks change
-  useEffect(() => {
-    if (prevBlocks && prevBlocks !== blocks) {
-      if (prevBlocks?.length + 1 === blocks.length) {
-        console.log('ADD BLOCK!');
-      } else if (prevBlocks?.length - 1 === blocks.length) {
-        console.log('REMOVE BLOCK!');
-      } else {
-        console.log('UPDATE BLOCK!');
-      }
-    }
+  // useEffect(() => {
+  //   if (prevBlocks && prevBlocks !== blocks) {
+  //   }
+  // }, [blocks, prevBlocks]);
 
-    console.log(blocks);
-  }, [blocks, prevBlocks]);
+  // add block
+  const addNewBlock = async (newBlock) => {
+    try {
+      const response = await blockApi.add(newBlock);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // Handling the cursor and focus on adding and deleting blocks
   useEffect(() => {
@@ -54,12 +56,9 @@ const NotePage = ({ pageId, fetchedBlocks }) => {
         .map((block) => block.blockId)
         .indexOf(currentBlockId);
 
-      console.log(lastBlockPosition);
-
       const lastBlock = document.querySelector(
         `[data-position="${lastBlockPosition}"]`
       );
-      console.log(lastBlock);
 
       if (lastBlock) {
         setCaretToEnd(lastBlock);
@@ -74,6 +73,7 @@ const NotePage = ({ pageId, fetchedBlocks }) => {
 
     updatedBlocks[index] = {
       ...updatedBlocks[index],
+
       tag: currentBlock.tag,
       html: currentBlock.html,
       imageUrl: currentBlock.imageUrl,
@@ -92,6 +92,7 @@ const NotePage = ({ pageId, fetchedBlocks }) => {
 
     updatedBlocks[index] = {
       ...updatedBlocks[index],
+
       tag: currentBlock.tag,
       html: currentBlock.html,
       imageUrl: currentBlock.imageUrl,

@@ -8,7 +8,6 @@ import { useParams } from 'react-router-dom';
 const MainPage = () => {
   const { pageId } = useParams();
   const [pageList, setPageList] = useState([]);
-  const [blocks, setBlocks] = useState([]);
 
   useEffect(() => {
     const fetchPageList = async () => {
@@ -20,18 +19,8 @@ const MainPage = () => {
       }
     };
 
-    const fetchBlocks = async (pageId) => {
-      try {
-        const response = await pageApi.getById(pageId);
-        setBlocks(response[0].blocks);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     fetchPageList();
-    fetchBlocks(pageId);
-  }, [setPageList, setBlocks, pageId]);
+  }, []);
 
   const noteList = pageList.map((page) => {
     const note = {
@@ -44,6 +33,7 @@ const MainPage = () => {
   });
 
   const tags = pageList.map((page) => page.hashtag);
+  const page = pageList.find((page) => page.pageId === pageId);
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
@@ -51,7 +41,7 @@ const MainPage = () => {
 
       <NoteList noteList={noteList} />
 
-      <NotePage pageId={pageId} fetchedBlocks={blocks} />
+      <NotePage pid={page?.id} pageId={pageId} fetchedBlocks={page?.blocks} />
     </div>
   );
 };

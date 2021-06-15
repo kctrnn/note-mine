@@ -38,7 +38,7 @@ const schema = yup.object().shape({
   accept: yup.bool().isTrue('Please accept the term and the privacy policy.'),
 });
 
-const SignupForm = (props) => {
+const SignupForm = ({ onSubmit }) => {
   const form = useForm({
     defaultValues: {
       username: '',
@@ -56,7 +56,7 @@ const SignupForm = (props) => {
     formState: { isSubmitting },
   } = form;
 
-  const onSubmit = (data) => console.log(data);
+  // const onSubmit = (data) => console.log(data);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='form'>

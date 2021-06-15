@@ -15,6 +15,21 @@ const blockApi = {
     const url = `/blocks/?_page=${pageId}`;
     return axiosClient.get(url);
   },
+
+  delete: (id) => {
+    const url = `/blocks/${id}`;
+    return axiosClient.delete(url);
+  },
+
+  add: (data) => {
+    const url = '/blocks';
+    return axiosClient.post(url, data);
+  },
+
+  update: (id, data) => {
+    const url = `/blocks/${id}`;
+    return axiosClient.put(url, data);
+  },
 };
 
 export default blockApi;
