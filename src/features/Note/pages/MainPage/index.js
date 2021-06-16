@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const MainPage = () => {
-  const { pageId } = useParams();
+  const { pageId, username } = useParams();
   const [pageList, setPageList] = useState([]);
 
   useEffect(() => {
@@ -22,18 +22,20 @@ const MainPage = () => {
     fetchPageList();
   }, []);
 
-  const noteList = pageList.map((page) => {
-    const note = {
-      title: page.blocks[0].html,
-      htmlBlocks: page.blocks.map((block) => block.html),
-      time: '21d',
-    };
+  const noteList = pageList
+    .filter((page) => page.creator.username === username)
+    .map((page) => {
+      const note = {
+        title: page.blocks[0].html,
+        htmlBlocks: page.blocks.map((block) => block.html),
+        time: '21d',
+      };
 
-    return note;
-  });
+      return note;
+    });
 
   const tags = pageList.map((page) => page.hashtag);
-  const page = pageList.find((page) => page.pageId === pageId);
+  const pid = pageList.find((page) => page.pageId === pageId)?.id;
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
@@ -41,7 +43,7 @@ const MainPage = () => {
 
       <NoteList noteList={noteList} />
 
-      <NotePage pid={page?.id} pageId={pageId} fetchedBlocks={page?.blocks} />
+      <NotePage pid={pid} pageId={pageId} />
     </div>
   );
 };

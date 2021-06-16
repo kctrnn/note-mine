@@ -8,30 +8,55 @@ import './NotePage.scss';
 import PropTypes from 'prop-types';
 import blockApi from 'api/blockApi';
 
-const NotePage = ({ pageId, fetchedBlocks, pid }) => {
-  const [blocks, setBlocks] = useState(fetchedBlocks);
+const NotePage = ({ pageId, pid }) => {
+  const [blocks, setBlocks] = useState([]);
   const [currentBlockId, setCurrentBlockId] = useState(null);
 
   const prevBlocks = usePrevious(blocks);
 
   useEffect(() => {
-    setBlocks(fetchedBlocks);
-  }, [fetchedBlocks]);
+    const fetchBlockList = async (pageId) => {
+      try {
+        const response = await blockApi.getByPageId(pageId);
+        setBlocks(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchBlockList(pageId);
+  }, [pageId]);
 
   // Update the database whenever blocks change
   // useEffect(() => {
   //   if (prevBlocks && prevBlocks !== blocks) {
+  //     blocks.forEach((block) => {
+  //       blockApi.update(block.id, block);
+  //     });
   //   }
   // }, [blocks, prevBlocks]);
 
-  // add block
-  const addNewBlock = async (newBlock) => {
-    try {
-      const response = await blockApi.add(newBlock);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleSaveClick = () => {
+    const blockIds = blocks.map((block) => block.blockId);
+
+    const fetchBlockList = async (pageId) => {
+      try {
+        const response = await blockApi.getByPageId(pageId);
+        const proBlocks = [...response];
+        proBlocks.forEach((block) => {
+          const position = blockIds.findIndex((id) => id === block.blockId) + 1;
+
+          blockApi.update(block.id, {
+            ...block,
+            position: `${position}${pageId}`,
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchBlockList(pageId);
   };
 
   // Handling the cursor and focus on adding and deleting blocks
@@ -68,7 +93,7 @@ const NotePage = ({ pageId, fetchedBlocks, pid }) => {
 
   const updateBlockHandler = (currentBlock) => {
     const index = blocks.map((b) => b.blockId).indexOf(currentBlock.id);
-    const oldBlock = blocks[index];
+    // const oldBlock = blocks[index];
     const updatedBlocks = [...blocks];
 
     updatedBlocks[index] = {
@@ -79,6 +104,14 @@ const NotePage = ({ pageId, fetchedBlocks, pid }) => {
       imageUrl: currentBlock.imageUrl,
     };
 
+    const idBlock = blocks.find(
+      (block) => block.blockId === currentBlock.id
+    ).id;
+
+    blockApi.update(idBlock, {
+      ...updatedBlocks[index],
+    });
+
     setBlocks(updatedBlocks);
   };
 
@@ -86,7 +119,16 @@ const NotePage = ({ pageId, fetchedBlocks, pid }) => {
     setCurrentBlockId(currentBlock.id);
     const index = blocks.map((b) => b.blockId).indexOf(currentBlock.id);
     const updatedBlocks = [...blocks];
-    const newBlock = { blockId: uid(), tag: 'p', html: '', imageUrl: '' };
+    const newBlock = {
+      blockId: uid(),
+      tag: 'p',
+      html: '',
+      imageUrl: '',
+      page: pid,
+      creator: 2,
+    };
+
+    blockApi.add(newBlock);
 
     updatedBlocks.splice(index + 1, 0, newBlock);
 
@@ -108,10 +150,23 @@ const NotePage = ({ pageId, fetchedBlocks, pid }) => {
     const updatedBlocks = [...blocks];
 
     if (blocks.length === 1) {
-      updatedBlocks.push({ blockId: uid(), html: '', tag: 'h1' });
+      updatedBlocks.push({
+        blockId: uid(),
+        tag: 'h1',
+        html: '',
+        imageUrl: '',
+        page: pid,
+        creator: 2,
+      });
     }
 
+    const idBlock = blocks.find(
+      (block) => block.blockId === currentBlock.id
+    ).id;
+    blockApi.delete(idBlock);
+
     updatedBlocks.splice(index, 1);
+
     setBlocks(updatedBlocks);
   };
 
@@ -157,6 +212,8 @@ const NotePage = ({ pageId, fetchedBlocks, pid }) => {
             })}
 
             {provided.placeholder}
+
+            <button onClick={handleSaveClick}>Save</button>
           </div>
         )}
       </Droppable>
@@ -166,10 +223,12 @@ const NotePage = ({ pageId, fetchedBlocks, pid }) => {
 
 NotePage.propTypes = {
   fetchedBlocks: PropTypes.array,
+  pageId: PropTypes.string,
 };
 
 NotePage.defaultProps = {
   fetchedBlocks: [],
+  pageId: 'kctrnn213',
 };
 
 export default NotePage;

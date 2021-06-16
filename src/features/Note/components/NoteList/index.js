@@ -1,9 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import './NoteList.scss';
 import CreateIcon from '@material-ui/icons/Create';
 import SearchIcon from '@material-ui/icons/Search';
+import React from 'react';
 import ContentEditable from 'react-contenteditable';
+import './NoteList.scss';
 
 const NoteList = ({ noteList }) => {
   return (

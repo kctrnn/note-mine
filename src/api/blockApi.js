@@ -11,8 +11,8 @@ const blockApi = {
     return axiosClient.get(url);
   },
 
-  getById: (pageId) => {
-    const url = `/blocks/?_page=${pageId}`;
+  getByPageId: (pageId) => {
+    const url = `/blocks/?_sort=position:ASC&page.pageId=${pageId}`;
     return axiosClient.get(url);
   },
 
