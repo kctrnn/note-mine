@@ -23,7 +23,7 @@ const schema = yup.object().shape({
     .required('This value is required.')
     .oneOf([yup.ref('password')], 'Password does not match.'),
 
-  fullname: yup
+  name: yup
     .string()
     .required('This value is required.')
     .test(
@@ -45,7 +45,7 @@ const SignupForm = ({ onSubmit }) => {
       email: '',
       password: '',
       rePassword: '',
-      fullname: '',
+      name: '',
       accept: false,
     },
     resolver: yupResolver(schema),
@@ -62,7 +62,7 @@ const SignupForm = ({ onSubmit }) => {
     <form onSubmit={handleSubmit(onSubmit)} className='form'>
       <div className='form-name'>
         <InputField
-          name='fullname'
+          name='name'
           label='Full name'
           form={form}
           placeholder='Hyun Bin'

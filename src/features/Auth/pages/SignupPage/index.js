@@ -2,13 +2,22 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { signup } from 'app/userSlice';
 import Logo from 'components/Logo';
 import SignupForm from 'features/Auth/components/SignupForm';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+import StorageKeys from 'constants/storage-keys';
 
 const SignupPage = () => {
+  useEffect(() => {
+    // clear local storage
+    localStorage.removeItem(StorageKeys.USER);
+    localStorage.removeItem(StorageKeys.TOKEN);
+  }, []);
+
   const dispatch = useDispatch();
   const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async (values) => {
     try {
@@ -16,15 +25,18 @@ const SignupPage = () => {
       const resultAction = await dispatch(action);
 
       const user = unwrapResult(resultAction);
-      const firstPageId = user.pages[0]?.pageId;
+      enqueueSnackbar('Register successfully!!! 🎉', { variant: 'success' });
 
-      if (firstPageId) {
-        history.push(`/${user.username}/${firstPageId}`);
-      } else {
-        history.push(`/${user.username}`);
-      }
+      // const firstPageId = user.pages[0]?.pageId;
+
+      // if (firstPageId) {
+      //   history.push(`/${user.username}/${firstPageId}`);
+      // } else {
+      //   history.push(`/${user.username}`);
+      // }
     } catch (error) {
       console.log('Failed to login:', error);
+      enqueueSnackbar(error.message, { variant: 'error' });
     }
   };
 

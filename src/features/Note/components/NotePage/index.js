@@ -8,7 +8,7 @@ import './NotePage.scss';
 import PropTypes from 'prop-types';
 import blockApi from 'api/blockApi';
 
-const NotePage = ({ pageId, pid }) => {
+const NotePage = ({ pageId, pid, userId }) => {
   const [blocks, setBlocks] = useState([]);
   const [currentBlockId, setCurrentBlockId] = useState(null);
 
@@ -26,15 +26,6 @@ const NotePage = ({ pageId, pid }) => {
 
     fetchBlockList(pageId);
   }, [pageId]);
-
-  // Update the database whenever blocks change
-  // useEffect(() => {
-  //   if (prevBlocks && prevBlocks !== blocks) {
-  //     blocks.forEach((block) => {
-  //       blockApi.update(block.id, block);
-  //     });
-  //   }
-  // }, [blocks, prevBlocks]);
 
   const handleSaveClick = () => {
     const blockIds = blocks.map((block) => block.blockId);
@@ -125,7 +116,7 @@ const NotePage = ({ pageId, pid }) => {
       html: '',
       imageUrl: '',
       page: pid,
-      creator: 2,
+      creator: userId,
     };
 
     blockApi.add(newBlock);
@@ -156,7 +147,7 @@ const NotePage = ({ pageId, pid }) => {
         html: '',
         imageUrl: '',
         page: pid,
-        creator: 2,
+        creator: userId,
       });
     }
 
@@ -222,12 +213,12 @@ const NotePage = ({ pageId, pid }) => {
 };
 
 NotePage.propTypes = {
-  fetchedBlocks: PropTypes.array,
   pageId: PropTypes.string,
+  userId: PropTypes.number.isRequired,
+  pid: PropTypes.number.isRequired,
 };
 
 NotePage.defaultProps = {
-  fetchedBlocks: [],
   pageId: 'kctrnn213',
 };
 

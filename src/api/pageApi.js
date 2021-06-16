@@ -16,9 +16,14 @@ const pageApi = {
     return axiosClient.get(url);
   },
 
-  updatePage: (id, data) => {
+  add: (data) => {
+    const url = '/pages';
+    return axiosClient.post(url, data);
+  },
+
+  delete: (id) => {
     const url = `/pages/${id}`;
-    return axiosClient.put(url, data);
+    return axiosClient.delete(url);
   },
 };
 
