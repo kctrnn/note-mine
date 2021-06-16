@@ -144,17 +144,10 @@ class NoteBlock extends React.Component {
   }
 
   tagSelectionHandler(tag) {
-    if (this.state.isTyping) {
-      // Update the tag and restore the html backup without the command
-      this.setState({ tag: tag, html: this.state.htmlBackup }, () => {
-        setCaretToEnd(this.contentEditable.current);
-        this.closeSelectMenuHandler();
-      });
-    } else {
-      this.setState({ ...this.state, tag: tag }, () => {
-        this.closeSelectMenuHandler();
-      });
-    }
+    this.setState({ tag: tag, html: this.state.htmlBackup }, () => {
+      setCaretToEnd(this.contentEditable.current);
+      this.closeSelectMenuHandler();
+    });
   }
 
   calculateActionMenuPosition(parent) {

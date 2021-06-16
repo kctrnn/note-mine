@@ -21,8 +21,7 @@ function App() {
             <Route path='/signup' component={SignupPage} />
             <Route path='/forgot-password' component={ForgotPasswordPage} />
 
-            <Route path='/:username/:pageId' component={Note} />
-            <Route path='/:username' component={Note} />
+            <Route path='/notes' component={Note} />
 
             <Route component={NotFound} />
           </Switch>

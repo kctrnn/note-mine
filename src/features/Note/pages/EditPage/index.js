@@ -1,16 +1,21 @@
+import blockApi from 'api/blockApi';
 import usePrevious from 'hooks/usePrevious';
-import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { useParams } from 'react-router-dom';
 import setCaretToEnd from 'utils/setCaretToEnd';
 import uid from 'utils/uid';
-import NoteBlock from '../NoteBlock';
-import './NotePage.scss';
-import PropTypes from 'prop-types';
-import blockApi from 'api/blockApi';
+import NoteBlock from '../../components/NoteBlock';
+import './EditPage.scss';
 
-const NotePage = ({ pageId, pid, userId }) => {
+const EditPage = () => {
   const [blocks, setBlocks] = useState([]);
   const [currentBlockId, setCurrentBlockId] = useState(null);
+
+  const { pageId } = useParams();
+  const pid = 5;
+  const userId = 2;
 
   const prevBlocks = usePrevious(blocks);
 
@@ -26,6 +31,11 @@ const NotePage = ({ pageId, pid, userId }) => {
 
     fetchBlockList(pageId);
   }, [pageId]);
+
+  useEffect(() => {
+    if (blocks !== prevBlocks) {
+    }
+  }, [blocks, prevBlocks]);
 
   const handleSaveClick = () => {
     const blockIds = blocks.map((block) => block.blockId);
@@ -82,7 +92,7 @@ const NotePage = ({ pageId, pid, userId }) => {
     }
   }, [blocks, currentBlockId, prevBlocks]);
 
-  const updateBlockHandler = (currentBlock) => {
+  const updateBlockHandler = async (currentBlock) => {
     const index = blocks.map((b) => b.blockId).indexOf(currentBlock.id);
     // const oldBlock = blocks[index];
     const updatedBlocks = [...blocks];
@@ -95,15 +105,17 @@ const NotePage = ({ pageId, pid, userId }) => {
       imageUrl: currentBlock.imageUrl,
     };
 
-    const idBlock = blocks.find(
-      (block) => block.blockId === currentBlock.id
-    ).id;
-
-    blockApi.update(idBlock, {
-      ...updatedBlocks[index],
-    });
-
     setBlocks(updatedBlocks);
+
+    // const idBlock = blocks.find(
+    //   (block) => block.blockId === currentBlock.id
+    // )?.id;
+
+    // if (idBlock) {
+    //   blockApi.update(idBlock, {
+    //     ...updatedBlocks[index],
+    //   });
+    // }
   };
 
   const addBlockHandler = (currentBlock) => {
@@ -176,50 +188,51 @@ const NotePage = ({ pageId, pid, userId }) => {
   };
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId={pageId}>
-        {(provided, snapshot) => (
-          <div
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            className='note-page'
-          >
-            {blocks.map((block) => {
-              const position =
-                blocks.map((block) => block.blockId).indexOf(block.blockId) + 1;
+    <div className='note-edit'>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId={pageId}>
+          {(provided, snapshot) => (
+            <div
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              className='note-page'
+            >
+              {blocks.map((block) => {
+                const position =
+                  blocks.map((block) => block.blockId).indexOf(block.blockId) +
+                  1;
 
-              return (
-                <NoteBlock
-                  key={block.blockId}
-                  id={block.blockId}
-                  position={position}
-                  tag={block.tag}
-                  html={block.html}
-                  addBlock={addBlockHandler}
-                  deleteBlock={deleteBlockHandler}
-                  updateBlock={updateBlockHandler}
-                />
-              );
-            })}
+                return (
+                  <NoteBlock
+                    key={block.blockId}
+                    id={block.blockId}
+                    position={position}
+                    tag={block.tag}
+                    html={block.html}
+                    addBlock={addBlockHandler}
+                    deleteBlock={deleteBlockHandler}
+                    updateBlock={updateBlockHandler}
+                  />
+                );
+              })}
 
-            {provided.placeholder}
+              {provided.placeholder}
 
-            <button onClick={handleSaveClick}>Save</button>
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+              <button onClick={handleSaveClick}>Save</button>
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </div>
   );
 };
 
-NotePage.propTypes = {
+EditPage.propTypes = {
   pageId: PropTypes.string,
-  userId: PropTypes.number.isRequired,
-  pid: PropTypes.number.isRequired,
 };
 
-NotePage.defaultProps = {
-  pageId: 'kctrnn213',
+EditPage.defaultProps = {
+  pageId: '',
 };
 
-export default NotePage;
+export default EditPage;
