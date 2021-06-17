@@ -4,11 +4,15 @@ import { useHistory } from 'react-router';
 import './Logo.scss';
 import classNames from 'classnames';
 
-const Logo = ({ size }) => {
+const Logo = ({ size, disableBack }) => {
   const history = useHistory();
 
   const handleLogoClick = () => {
-    history.push('/');
+    if (disableBack) {
+      history.go(0);
+    } else {
+      history.push('/');
+    }
   };
 
   const logoClass = classNames('logo', {

@@ -27,13 +27,7 @@ const SignupPage = () => {
       const user = unwrapResult(resultAction);
       enqueueSnackbar('Register successfully!!! 🎉', { variant: 'success' });
 
-      // const firstPageId = user.pages[0]?.pageId;
-
-      // if (firstPageId) {
-      //   history.push(`/${user.username}/${firstPageId}`);
-      // } else {
-      //   history.push(`/${user.username}`);
-      // }
+      history.push('/notes');
     } catch (error) {
       console.log('Failed to login:', error);
       enqueueSnackbar(error.message, { variant: 'error' });

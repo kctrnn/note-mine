@@ -11,11 +11,6 @@ const pageApi = {
     return axiosClient.get(url);
   },
 
-  getById: (pageId) => {
-    const url = `/pages/?_pageId=${pageId}`;
-    return axiosClient.get(url);
-  },
-
   add: (data) => {
     const url = '/pages';
     return axiosClient.post(url, data);

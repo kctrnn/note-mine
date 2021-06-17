@@ -44,7 +44,7 @@ const UserBar = (props) => {
 
   return (
     <div className='user-bar'>
-      <Logo size='small' />
+      <Logo size='small' disableBack />
 
       <p className='user-bar-text'>{`🚀 Hello, ${loginInUser.username}`}</p>
 

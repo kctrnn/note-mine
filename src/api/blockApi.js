@@ -30,6 +30,11 @@ const blockApi = {
     const url = `/blocks/${id}`;
     return axiosClient.put(url, data);
   },
+
+  uploadImage: (data) => {
+    const url = '/upload';
+    return axiosClient.post(url, data);
+  },
 };
 
 export default blockApi;

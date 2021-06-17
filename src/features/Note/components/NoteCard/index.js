@@ -1,9 +1,30 @@
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
-import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import React from 'react';
+import ContentEditable from 'react-contenteditable';
+import { Link } from 'react-router-dom';
 import './NoteCard.scss';
+import { IconButton } from '@material-ui/core';
 
-const NoteCard = () => {
+const MONTHS = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
+
+const NoteCard = ({ title, text, date, pageId }) => {
+  const formattedDate = `${
+    MONTHS[date.getMonth()]
+  } ${date.getDate()}, ${date.getFullYear()}`;
+
   return (
     <div className='note-card'>
       <div className='card-image'>
@@ -13,17 +34,22 @@ const NoteCard = () => {
         />
       </div>
       <div className='card-content'>
-        <p className='card-date'>JUN 21, 2020</p>
-        <h3 className='card-title'>Welcome to NoteMine</h3>
-        <p className='card-desc'>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Optio
-          cupiditate, eius illo sapiente repellat recusandae quo tempora totam
-          corrupti.
-        </p>
+        <p className='card-date'>{formattedDate}</p>
+        <h3 className='card-title'>{title}</h3>
+        <div className='card-desc'>
+          {text.map((blockHtml, index) => (
+            <ContentEditable disabled html={blockHtml} key={index} />
+          ))}
+        </div>
 
         <div className='card-actions'>
-          <EditTwoToneIcon fontSize='large' />
-          <DeleteTwoToneIcon fontSize='large' />
+          <Link to={`/notes/${pageId}`} className='card-edit'>
+            Edit
+          </Link>
+
+          <IconButton color='default'>
+            <DeleteTwoToneIcon className='card-delete' />
+          </IconButton>
         </div>
       </div>
     </div>

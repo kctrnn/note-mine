@@ -1,3 +1,4 @@
+import blockApi from 'api/blockApi';
 import classNames from 'classnames';
 import Icons from 'constants/icons';
 import React from 'react';
@@ -12,22 +13,27 @@ class NoteBlock extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onKeyUpHandler = this.onKeyUpHandler.bind(this);
-    this.openSelectMenuHandler = this.openSelectMenuHandler.bind(this);
-    this.closeSelectMenuHandler = this.closeSelectMenuHandler.bind(this);
-    this.tagSelectionHandler = this.tagSelectionHandler.bind(this);
     this.onChangeHandler = this.onChangeHandler.bind(this);
     this.onKeyDownHandler = this.onKeyDownHandler.bind(this);
-    this.handleDragIconClick = this.handleDragIconClick.bind(this);
-    this.calculateActionMenuPosition =
-      this.calculateActionMenuPosition.bind(this);
-    this.openActionMenu = this.openActionMenu.bind(this);
-    this.closeActionMenu = this.closeActionMenu.bind(this);
-    this.handleTurnIntoClick = this.handleTurnIntoClick.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
 
+    this.openSelectMenuHandler = this.openSelectMenuHandler.bind(this);
+    this.closeSelectMenuHandler = this.closeSelectMenuHandler.bind(this);
+
+    this.tagSelectionHandler = this.tagSelectionHandler.bind(this);
+    this.handleDragIconClick = this.handleDragIconClick.bind(this);
+    this.handleTurnIntoClick = this.handleTurnIntoClick.bind(this);
+
+    this.openActionMenu = this.openActionMenu.bind(this);
+    this.closeActionMenu = this.closeActionMenu.bind(this);
+    this.calculateActionMenuPosition =
+      this.calculateActionMenuPosition.bind(this);
+
+    this.handleImageUpload = this.handleImageUpload.bind(this);
+
     this.contentEditable = React.createRef();
+    this.fileInput = null;
 
     this.state = {
       html: '',
@@ -50,7 +56,6 @@ class NoteBlock extends React.Component {
 
   componentDidMount() {
     this.setState({
-      ...this.state,
       html: this.props.html,
       tag: this.props.tag,
       imageUrl: this.props.imageUrl,
@@ -58,10 +63,6 @@ class NoteBlock extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // update the page on the server if one of the following is true
-    // 1. user stopped typing and the html content has changed & no placeholder set
-    // 2. user changed the tag & no placeholder set
-    // 3. user changed the image & no placeholder set
     const stoppedTyping = prevState.isTyping && !this.state.isTyping;
 
     const htmlChanged = this.props.html !== this.state.html;
@@ -71,6 +72,7 @@ class NoteBlock extends React.Component {
     if ((stoppedTyping && htmlChanged) || tagChanged || imageChanged) {
       this.props.updateBlock({
         id: this.props.id,
+
         html: this.state.html,
         tag: this.state.tag,
         imageUrl: this.state.imageUrl,
@@ -83,26 +85,25 @@ class NoteBlock extends React.Component {
   }
 
   onChangeHandler(e) {
-    this.setState({ ...this.state, html: e.target.value });
+    this.setState({ html: e.target.value });
   }
 
   handleFocus() {
-    this.setState({ ...this.state, isTyping: true });
+    this.setState({ isTyping: true });
   }
 
   handleBlur() {
-    this.setState({ ...this.state, isTyping: false });
+    this.setState({ isTyping: false });
   }
 
   onKeyDownHandler(e) {
-    if (e.key === '/') {
-      this.setState({ htmlBackup: this.state.html });
-    } else if (
+    if (
       e.key === 'Enter' &&
       this.state.previousKey !== 'Shift' &&
       !this.state.selectMenuIsOpen
     ) {
       e.preventDefault();
+
       this.props.addBlock({
         id: this.props.id,
 
@@ -116,16 +117,37 @@ class NoteBlock extends React.Component {
     this.setState({ previousKey: e.key });
   }
 
-  onKeyUpHandler(e) {
-    if (e.key === '/') {
-      this.openSelectMenuHandler();
-    }
+  handleDragIconClick(e) {
+    const dragHandle = e.target;
+    this.openActionMenu(dragHandle);
+  }
+
+  openActionMenu(parent) {
+    const { x, y } = this.calculateActionMenuPosition(parent);
+
+    this.setState({
+      actionMenuIsOpen: true,
+      actionMenuPosition: { x: x, y: y },
+    });
+
+    setTimeout(() => {
+      document.addEventListener('click', this.closeActionMenu, false);
+    }, 100);
+  }
+
+  closeActionMenu() {
+    this.setState({
+      actionMenuIsOpen: false,
+      actionMenuPosition: { x: null, y: null },
+    });
+
+    document.removeEventListener('click', this.closeActionMenu);
   }
 
   openSelectMenuHandler() {
     this.setState({
-      ...this.state,
       selectMenuIsOpen: true,
+      htmlBackup: this.state.html,
     });
 
     setTimeout(() => {
@@ -135,7 +157,6 @@ class NoteBlock extends React.Component {
 
   closeSelectMenuHandler() {
     this.setState({
-      ...this.state,
       htmlBackup: null,
       selectMenuIsOpen: false,
     });
@@ -144,10 +165,31 @@ class NoteBlock extends React.Component {
   }
 
   tagSelectionHandler(tag) {
-    this.setState({ tag: tag, html: this.state.htmlBackup }, () => {
-      setCaretToEnd(this.contentEditable.current);
-      this.closeSelectMenuHandler();
-    });
+    if (tag === 'img') {
+      this.setState({ tag: tag }, () => {
+        this.closeSelectMenuHandler();
+
+        if (this.fileInput) {
+          // Open the native file picker
+          this.fileInput.click();
+        }
+        // Add new block so that the user can continue writing
+        // after adding an image
+        this.props.addBlock({
+          id: this.props.id,
+
+          html: '',
+          tag: 'p',
+          imageUrl: '',
+          ref: this.contentEditable.current,
+        });
+      });
+    } else {
+      this.setState({ tag: tag, html: this.state.htmlBackup }, () => {
+        setCaretToEnd(this.contentEditable.current);
+        this.closeSelectMenuHandler();
+      });
+    }
   }
 
   calculateActionMenuPosition(parent) {
@@ -157,41 +199,29 @@ class NoteBlock extends React.Component {
     return { x, y };
   }
 
-  openActionMenu(parent) {
-    const { x, y } = this.calculateActionMenuPosition(parent);
-
-    this.setState({
-      ...this.state,
-      actionMenuIsOpen: true,
-      actionMenuPosition: { x: x, y: y },
-    });
-
-    // Add listener asynchronously to avoid conflicts with
-    // the double click of the text selection
-    setTimeout(() => {
-      document.addEventListener('click', this.closeActionMenu, false);
-    }, 100);
-  }
-
-  closeActionMenu() {
-    this.setState({
-      ...this.state,
-      actionMenuIsOpen: false,
-      actionMenuPosition: { x: null, y: null },
-    });
-
-    document.removeEventListener('click', this.closeActionMenu);
-  }
-
-  handleDragIconClick(e) {
-    const dragHandle = e.target;
-    this.openActionMenu(dragHandle);
-  }
-
   handleTurnIntoClick = () => {
-    this.setState({ htmlBackup: this.state.html });
     this.openSelectMenuHandler();
   };
+
+  async handleImageUpload() {
+    if (this.fileInput && this.fileInput.files[0]) {
+      const imageFile = this.fileInput.files[0];
+
+      const formData = new FormData();
+      formData.append('files', imageFile);
+
+      try {
+        const response = await blockApi.uploadImage(formData);
+
+        const { url } = response[0].formats.small;
+        const imageUrl = process.env.REACT_APP_API_URL + url;
+
+        this.setState({ imageUrl: imageUrl });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
 
   render() {
     return (
@@ -213,7 +243,7 @@ class NoteBlock extends React.Component {
           />
         )}
 
-        {this.props.position === 1 && (
+        {this.props.position === 1 && this.state.tag !== 'img' && (
           <ContentEditable
             className='block-text title'
             innerRef={this.contentEditable}
@@ -221,7 +251,6 @@ class NoteBlock extends React.Component {
             tagName={this.state.tag}
             onChange={this.onChangeHandler}
             // onKeyDown={this.onKeyDownHandler}
-            // onKeyUp={this.onKeyUpHandler}
             data-position={this.props.position}
             onBlur={this.handleBlur}
             onFocus={this.handleFocus}
@@ -238,18 +267,61 @@ class NoteBlock extends React.Component {
                 ref={provided.innerRef}
                 {...provided.draggableProps}
               >
-                <ContentEditable
-                  className='block-text'
-                  innerRef={this.contentEditable}
-                  html={this.state.html}
-                  tagName={this.state.tag}
-                  onChange={this.onChangeHandler}
-                  onKeyDown={this.onKeyDownHandler}
-                  onKeyUp={this.onKeyUpHandler}
-                  data-position={this.props.position}
-                  onBlur={this.handleBlur}
-                  onFocus={this.handleFocus}
-                />
+                {this.state.tag !== 'img' && (
+                  <ContentEditable
+                    className='block-text'
+                    innerRef={this.contentEditable}
+                    html={this.state.html}
+                    tagName={this.state.tag}
+                    onChange={this.onChangeHandler}
+                    onKeyDown={this.onKeyDownHandler}
+                    data-position={this.props.position}
+                    onBlur={this.handleBlur}
+                    onFocus={this.handleFocus}
+                  />
+                )}
+
+                {this.state.tag === 'img' && (
+                  <div
+                    data-position={this.props.position}
+                    data-tag={this.state.tag}
+                    ref={this.contentEditable}
+                    // className={[
+                    //   styles.image,
+                    //   this.state.actionMenuOpen || this.state.tagSelectorMenuOpen
+                    //     ? styles.blockSelected
+                    //     : null,
+                    // ].join(" ")}
+                  >
+                    <input
+                      id={`${this.props.id}_fileInput`}
+                      name={this.state.tag}
+                      type='file'
+                      onChange={this.handleImageUpload}
+                      ref={(ref) => (this.fileInput = ref)}
+                      hidden
+                    />
+
+                    {!this.state.imageUrl && (
+                      <label
+                        htmlFor={`${this.props.id}_fileInput`}
+                        // className={styles.fileInputLabel}
+                      >
+                        No Image Selected. Click To Select
+                      </label>
+                    )}
+
+                    {this.state.imageUrl &&
+                      {
+                        /* <img
+                      src={
+                        process.env.NEXT_PUBLIC_API + "/" + this.state.imageUrl
+                      }
+                      alt={/[^\/]+(?=\.[^\/.]*$)/.exec(this.state.imageUrl)[0]}
+                    /> */
+                      }}
+                  </div>
+                )}
 
                 <span
                   className='block-icon'

@@ -13,19 +13,17 @@ function App() {
   return (
     <div className='note-mine-app'>
       <Suspense fallback={<div>Loading ...</div>}>
-        <Router>
-          <Switch>
-            <Route exact path='/' component={Home} />
+        <Switch>
+          <Route exact path='/' component={Home} />
 
-            <Route path='/login' component={LoginPage} />
-            <Route path='/signup' component={SignupPage} />
-            <Route path='/forgot-password' component={ForgotPasswordPage} />
+          <Route path='/login' component={LoginPage} />
+          <Route path='/signup' component={SignupPage} />
+          <Route path='/forgot-password' component={ForgotPasswordPage} />
 
-            <Route path='/notes' component={Note} />
+          <Route path='/notes' component={Note} />
 
-            <Route component={NotFound} />
-          </Switch>
-        </Router>
+          <Route component={NotFound} />
+        </Switch>
       </Suspense>
     </div>
   );

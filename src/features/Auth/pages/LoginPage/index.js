@@ -1,4 +1,5 @@
 import { Chip, makeStyles } from '@material-ui/core';
+import Avatar from '@material-ui/core/Avatar';
 import FaceIcon from '@material-ui/icons/Face';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { login } from 'app/userSlice';
@@ -9,7 +10,6 @@ import { useSnackbar } from 'notistack';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import Avatar from '@material-ui/core/Avatar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginPage = () => {
+const LoginPage = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
@@ -54,7 +54,9 @@ const LoginPage = () => {
       const resultAction = await dispatch(action);
 
       const user = unwrapResult(resultAction);
-      enqueueSnackbar('Register successfully!!! 🎉', { variant: 'success' });
+      enqueueSnackbar('Login successfully!!! 🎉', {
+        variant: 'success',
+      });
 
       history.push('/notes');
     } catch (error) {
@@ -63,44 +65,22 @@ const LoginPage = () => {
     }
   };
 
-  const handleNoteMineClick = async () => {
-    try {
-      const values = {
-        identifier: 'notemine@gmail.com',
-        password: 'Notemine123',
-      };
+  const handleNoteMineClick = () => {
+    const values = {
+      identifier: 'notemine@gmail.com',
+      password: 'Notemine123',
+    };
 
-      const action = login(values);
-      const resultAction = await dispatch(action);
-
-      const user = unwrapResult(resultAction);
-      enqueueSnackbar('Login successfully!!! 🎉', { variant: 'success' });
-
-      history.push('/notes');
-    } catch (error) {
-      console.log('Failed to login:', error);
-      enqueueSnackbar(error.message, { variant: 'error' });
-    }
+    handleSubmit(values);
   };
 
-  const handleTeoClick = async () => {
-    try {
-      const values = {
-        identifier: 'teo@gmail.com',
-        password: '123123123',
-      };
+  const handleTeoClick = () => {
+    const values = {
+      identifier: 'teo@gmail.com',
+      password: '123123123',
+    };
 
-      const action = login(values);
-      const resultAction = await dispatch(action);
-
-      const user = unwrapResult(resultAction);
-      enqueueSnackbar('Login successfully!!! 🎉', { variant: 'success' });
-
-      history.push('/notes');
-    } catch (error) {
-      console.log('Failed to login:', error);
-      enqueueSnackbar(error.message, { variant: 'error' });
-    }
+    handleSubmit(values);
   };
 
   return (
