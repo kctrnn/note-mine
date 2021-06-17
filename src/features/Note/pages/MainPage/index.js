@@ -1,5 +1,7 @@
 import pageApi from 'api/pageApi';
 import React, { useEffect, useState } from 'react';
+import NoteCard from '../../components/NoteCard';
+import UserBar from '../../components/UserBar';
 
 const MainPage = () => {
   const [pageList, setPageList] = useState([]);
@@ -19,10 +21,11 @@ const MainPage = () => {
 
   return (
     <div className='note-main'>
-      {/* <Sidebar tagList={tags} />
-      <NoteList noteList={noteList} userId={loggedInUser.id} /> */}
+      <UserBar />
 
-      {/* <NotePage pid={pid} pageId={pageId} userId={loggedInUser.id} /> */}
+      <NoteCard />
+      <NoteCard />
+      <NoteCard />
     </div>
   );
 };
