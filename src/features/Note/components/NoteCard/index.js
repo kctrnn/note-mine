@@ -1,15 +1,14 @@
+import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
+import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import React from 'react';
-import PropTypes from 'prop-types';
 import './NoteCard.scss';
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import EditIcon from '@material-ui/icons/Edit';
 
 const NoteCard = () => {
   return (
     <div className='note-card'>
       <div className='card-image'>
         <img
-          src='https://images.unsplash.com/photo-1623180253479-3eaed9dda118?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=666&q=80'
+          src='https://images.unsplash.com/photo-1510936111840-65e151ad71bb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1067&q=80'
           alt=''
         />
       </div>
@@ -23,8 +22,8 @@ const NoteCard = () => {
         </p>
 
         <div className='card-actions'>
-          <EditIcon fontSize='large' />
-          <DeleteOutlineIcon fontSize='large' />
+          <EditTwoToneIcon fontSize='large' />
+          <DeleteTwoToneIcon fontSize='large' />
         </div>
       </div>
     </div>

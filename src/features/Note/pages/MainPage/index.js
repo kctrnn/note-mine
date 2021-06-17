@@ -20,8 +20,10 @@ const MainPage = () => {
   }, []);
 
   return (
-    <div className='note-main'>
+    <div className='note-main' style={{ maxWidth: '50vw', margin: '0 auto' }}>
       <UserBar />
+
+      <h1 style={{ marginBottom: '4rem', fontWeight: '600' }}>Notes</h1>
 
       <NoteCard />
       <NoteCard />

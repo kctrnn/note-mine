@@ -5,6 +5,14 @@
 
   cursor: pointer;
 
+  &--small > &-text {
+    font-size: 2rem;
+  }
+
+  &--small > &-icon {
+    font-size: 2rem !important;
+  }
+
   &-icon {
     font-size: 3rem !important;
     margin-right: 1rem;
