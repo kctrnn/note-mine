@@ -2,6 +2,7 @@ import Home from 'components/Home';
 import NotFound from 'components/NotFound';
 import ForgotPasswordPage from 'features/Auth/pages/ForgotPasswordPage';
 import LoginPage from 'features/Auth/pages/LoginPage';
+import ResetPasswordPage from 'features/Auth/pages/ResetPasswordPage';
 import SignupPage from 'features/Auth/pages/SignupPage';
 import React, { Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
@@ -19,6 +20,7 @@ function App() {
           <Route path='/login' component={LoginPage} />
           <Route path='/signup' component={SignupPage} />
           <Route path='/forgot-password' component={ForgotPasswordPage} />
+          <Route path='/reset-password' component={ResetPasswordPage} />
 
           <Route path='/notes' component={Note} />
 

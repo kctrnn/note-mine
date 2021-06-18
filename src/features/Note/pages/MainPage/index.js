@@ -7,6 +7,7 @@ import UserBar from '../../components/UserBar';
 
 const MainPage = () => {
   const [pageList, setPageList] = useState([]);
+
   const loggedInUser = useSelector((state) => state.user.current);
   const userId = loggedInUser.id;
 
@@ -45,7 +46,7 @@ const MainPage = () => {
 
   return (
     <div className='note-main' style={{ maxWidth: '50vw', margin: '0 auto' }}>
-      <UserBar />
+      {!!userId && <UserBar />}
 
       <h1 style={{ marginBottom: '4rem', fontWeight: '600' }}>Notes</h1>
 

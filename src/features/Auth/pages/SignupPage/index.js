@@ -4,20 +4,28 @@ import Logo from 'components/Logo';
 import SignupForm from 'features/Auth/components/SignupForm';
 import { useSnackbar } from 'notistack';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 
 const SignupPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+
   const { enqueueSnackbar } = useSnackbar();
+
+  const loggedInUser = useSelector((state) => state.user.current);
+  const isLoggedIn = !!loggedInUser.id;
+
+  if (isLoggedIn) {
+    history.push('/');
+  }
 
   const handleSubmit = async (values) => {
     try {
       const action = signup(values);
       const resultAction = await dispatch(action);
 
-      const user = unwrapResult(resultAction);
+      unwrapResult(resultAction);
       enqueueSnackbar('Register successfully 🎉🎉', { variant: 'success' });
 
       history.push('/notes');

@@ -7,7 +7,7 @@ import Logo from 'components/Logo';
 import LoginForm from 'features/Auth/components/LoginForm';
 import { useSnackbar } from 'notistack';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
   loginAs: {
     textAlign: 'center',
     fontSize: '1.3rem',
+    fontFamily: `'Poppins', sans-serif`,
 
     '& > svg': {
       fontSize: '2.4rem',
@@ -35,18 +36,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginPage = (props) => {
-  const dispatch = useDispatch();
-  const history = useHistory();
+const LoginPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const loggedInUser = useSelector((state) => state.user.current);
+  const isLoggedIn = !!loggedInUser.id;
+
+  if (isLoggedIn) {
+    history.push('/');
+  }
 
   const handleSubmit = async (values) => {
     try {
       const action = login(values);
       const resultAction = await dispatch(action);
 
-      const user = unwrapResult(resultAction);
+      unwrapResult(resultAction);
 
       enqueueSnackbar('Login successfully 🎉🎉', {
         variant: 'success',
