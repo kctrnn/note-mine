@@ -2,19 +2,12 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { signup } from 'app/userSlice';
 import Logo from 'components/Logo';
 import SignupForm from 'features/Auth/components/SignupForm';
-import React, { useEffect } from 'react';
+import { useSnackbar } from 'notistack';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
-import StorageKeys from 'constants/storage-keys';
 
 const SignupPage = () => {
-  useEffect(() => {
-    // clear local storage
-    localStorage.removeItem(StorageKeys.USER);
-    localStorage.removeItem(StorageKeys.TOKEN);
-  }, []);
-
   const dispatch = useDispatch();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
@@ -37,7 +30,7 @@ const SignupPage = () => {
   return (
     <div
       className='auth-signup'
-      style={{ paddingTop: '8rem', paddingBottom: '3rem' }}
+      style={{ paddingTop: '5rem', paddingBottom: '3rem' }}
     >
       <Logo />
       <SignupForm onSubmit={handleSubmit} />

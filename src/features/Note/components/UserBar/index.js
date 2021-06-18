@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UserBar = (props) => {
-  const loginInUser = useSelector((state) => state.user.current);
+  const loggedInUser = useSelector((state) => state.user.current);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -51,9 +51,9 @@ const UserBar = (props) => {
 
   return (
     <div className='user-bar'>
-      <Logo size='small' disableBack />
+      <Logo size='small' />
 
-      <p className='user-bar-text'>{`🚀 Hello, ${loginInUser.username} `}</p>
+      <p className='user-bar-text'>{`🚀 Hello, ${loggedInUser.username} `}</p>
 
       <IconButton
         color='inherit'

@@ -6,6 +6,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import './SignupForm.scss';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { makeStyles } from '@material-ui/core';
 
 const schema = yup.object().shape({
   email: yup
@@ -38,7 +40,18 @@ const schema = yup.object().shape({
   accept: yup.bool().isTrue('Please accept the term and the privacy policy.'),
 });
 
+const useStyles = makeStyles((theme) => ({
+  progress: {
+    position: 'absolute',
+    top: '-4px',
+    left: 0,
+    right: 0,
+  },
+}));
+
 const SignupForm = ({ onSubmit }) => {
+  const classes = useStyles();
+
   const form = useForm({
     defaultValues: {
       username: '',
@@ -52,14 +65,19 @@ const SignupForm = ({ onSubmit }) => {
   });
 
   const {
-    handleSubmit,
     formState: { isSubmitting },
   } = form;
 
-  // const onSubmit = (data) => console.log(data);
+  const handleSubmit = async (values) => {
+    if (onSubmit) {
+      await onSubmit(values);
+    }
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className='form'>
+    <form onSubmit={form.handleSubmit(handleSubmit)} className='form'>
+      {isSubmitting && <LinearProgress className={classes.progress} />}
+
       <div className='form-name'>
         <InputField
           name='name'

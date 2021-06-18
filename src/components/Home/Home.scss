@@ -9,7 +9,7 @@
   font-size: 1.6rem;
 
   &-title {
-    font-size: 6rem;
+    font-size: 5.5rem;
     text-transform: uppercase;
     color: #333;
     margin: 1.5rem 0;
@@ -102,4 +102,9 @@
 
     background-color: #fff;
   }
+}
+
+.welcome-page {
+  overflow-y: hidden;
+  height: 100vh;
 }

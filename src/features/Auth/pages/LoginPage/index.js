@@ -4,10 +4,9 @@ import FaceIcon from '@material-ui/icons/Face';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { login } from 'app/userSlice';
 import Logo from 'components/Logo';
-import StorageKeys from 'constants/storage-keys';
 import LoginForm from 'features/Auth/components/LoginForm';
 import { useSnackbar } from 'notistack';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -41,12 +40,6 @@ const LoginPage = (props) => {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
-
-  useEffect(() => {
-    // clear local storage
-    localStorage.removeItem(StorageKeys.USER);
-    localStorage.removeItem(StorageKeys.TOKEN);
-  }, []);
 
   const handleSubmit = async (values) => {
     try {
@@ -85,7 +78,7 @@ const LoginPage = (props) => {
   };
 
   return (
-    <div className='auth-login' style={{ paddingTop: '8rem' }}>
+    <div className='auth-login' style={{ paddingTop: '5rem' }}>
       <Logo />
       <LoginForm onSubmit={handleSubmit} />
 

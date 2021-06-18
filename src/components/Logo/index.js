@@ -1,18 +1,14 @@
 import PanToolIcon from '@material-ui/icons/PanTool';
+import classNames from 'classnames';
 import React from 'react';
 import { useHistory } from 'react-router';
 import './Logo.scss';
-import classNames from 'classnames';
 
-const Logo = ({ size, disableBack }) => {
+const Logo = ({ size }) => {
   const history = useHistory();
 
   const handleLogoClick = () => {
-    if (disableBack) {
-      history.go(0);
-    } else {
-      history.push('/');
-    }
+    history.push('/');
   };
 
   const logoClass = classNames('logo', {

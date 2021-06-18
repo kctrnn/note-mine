@@ -1,4 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { makeStyles } from '@material-ui/core';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import CheckboxField from 'components/form-controls/CheckboxField';
 import InputField from 'components/form-controls/InputField';
 import PasswordField from 'components/form-controls/PasswordField';
@@ -16,7 +18,18 @@ const schema = yup.object().shape({
   password: yup.string().required('Please enter your password'),
 });
 
+const useStyles = makeStyles((theme) => ({
+  progress: {
+    position: 'absolute',
+    top: '-4px',
+    left: 0,
+    right: 0,
+  },
+}));
+
 const LoginForm = ({ onSubmit }) => {
+  const classes = useStyles();
+
   const form = useForm({
     defaultValues: {
       identifier: '',
@@ -26,14 +39,19 @@ const LoginForm = ({ onSubmit }) => {
   });
 
   const {
-    handleSubmit,
     formState: { isSubmitting },
   } = form;
 
-  // const onSubmit = (data) => console.log(data);
+  const handleSubmit = async (values) => {
+    if (onSubmit) {
+      await onSubmit(values);
+    }
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className='form'>
+    <form onSubmit={form.handleSubmit(handleSubmit)} className='form'>
+      {isSubmitting && <LinearProgress className={classes.progress} />}
+
       <InputField
         name='identifier'
         label='Email'

@@ -9,7 +9,9 @@ const Home = () => {
       <Header />
 
       <section className='my-team'>
-        <h1 className='my-team-title'>Welcome to my team</h1>
+        <h1 className='my-team-title'>
+          Welcome to <br /> my team
+        </h1>
         <p className='my-team-description'>
           We are a team gathered to do a fun project in the CMU-CS 447 JIS
           subject by lecturer Nguyen Chien Thang

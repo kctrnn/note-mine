@@ -7,8 +7,8 @@ import UserBar from '../../components/UserBar';
 
 const MainPage = () => {
   const [pageList, setPageList] = useState([]);
-  const loginInUser = useSelector((state) => state.user.current);
-  const userId = loginInUser.id;
+  const loggedInUser = useSelector((state) => state.user.current);
+  const userId = loggedInUser.id;
 
   useEffect(() => {
     const fetchPageList = async () => {
