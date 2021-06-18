@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   list: {
     '& > *': {
       fontSize: '1.4rem',
-      fontFamily: "'Poppins', sans-serif",
+      fontFamily: `'Poppins', sans-serif`,
       fontWeight: '500',
     },
   },

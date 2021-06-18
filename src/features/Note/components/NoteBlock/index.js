@@ -266,9 +266,9 @@ class NoteBlock extends React.Component {
             className='block-text title'
             innerRef={this.contentEditable}
             html={this.state.html}
-            tagName={this.state.tag}
+            tagName='h1'
             onChange={this.onChangeHandler}
-            // onKeyDown={this.onKeyDownHandler}
+            onKeyDown={this.onKeyDownHandler}
             data-position={this.props.position}
             onBlur={this.handleBlur}
             onFocus={this.handleFocus}
