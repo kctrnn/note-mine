@@ -27,8 +27,11 @@ class NoteBlock extends React.Component {
 
     this.openActionMenu = this.openActionMenu.bind(this);
     this.closeActionMenu = this.closeActionMenu.bind(this);
+
     this.calculateActionMenuPosition =
       this.calculateActionMenuPosition.bind(this);
+    this.calculateSelectMenuPosition =
+      this.calculateSelectMenuPosition.bind(this);
 
     this.handleImageUpload = this.handleImageUpload.bind(this);
 
@@ -44,6 +47,10 @@ class NoteBlock extends React.Component {
       previousKey: '',
 
       selectMenuIsOpen: false,
+      selectMenuPosition: {
+        x: null,
+        y: null,
+      },
 
       actionMenuIsOpen: false,
       actionMenuPosition: {
@@ -146,20 +153,28 @@ class NoteBlock extends React.Component {
   }
 
   openSelectMenuHandler() {
+    const { x, y } = this.calculateSelectMenuPosition();
+
     this.setState({
+      selectMenuPosition: { x, y },
       selectMenuIsOpen: true,
+
       htmlBackup: this.state.html,
     });
 
     setTimeout(() => {
       document.addEventListener('click', this.closeSelectMenuHandler);
     }, 100);
+
+    // document.addEventListener('click', this.closeSelectMenuHandler);
   }
 
   closeSelectMenuHandler() {
     this.setState({
-      htmlBackup: null,
       selectMenuIsOpen: false,
+      selectMenuPosition: { x: null, y: null },
+
+      htmlBackup: null,
     });
 
     document.removeEventListener('click', this.closeSelectMenuHandler);
@@ -200,6 +215,11 @@ class NoteBlock extends React.Component {
     return { x, y };
   }
 
+  calculateSelectMenuPosition() {
+    const { x: actionX, y: actionY } = this.state.actionMenuPosition;
+    return { x: actionX - 40, y: actionY };
+  }
+
   handleTurnIntoClick = () => {
     this.openSelectMenuHandler();
   };
@@ -226,12 +246,11 @@ class NoteBlock extends React.Component {
     return (
       <div className='note-block'>
         {this.state.selectMenuIsOpen && (
-          <div className='select-menu-modal'>
-            <SelectMenu
-              onSelection={this.tagSelectionHandler}
-              oncloseMenu={this.closeSelectMenuHandler}
-            />
-          </div>
+          <SelectMenu
+            position={this.state.selectMenuPosition}
+            onSelection={this.tagSelectionHandler}
+            oncloseMenu={this.closeSelectMenuHandler}
+          />
         )}
 
         {this.state.actionMenuIsOpen && (

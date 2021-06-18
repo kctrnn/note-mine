@@ -25,7 +25,7 @@ const SignupPage = () => {
       const resultAction = await dispatch(action);
 
       const user = unwrapResult(resultAction);
-      enqueueSnackbar('Register successfully!!! 🎉', { variant: 'success' });
+      enqueueSnackbar('Register successfully 🎉🎉', { variant: 'success' });
 
       history.push('/notes');
     } catch (error) {

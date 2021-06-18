@@ -4,7 +4,7 @@ import ForgotPasswordPage from 'features/Auth/pages/ForgotPasswordPage';
 import LoginPage from 'features/Auth/pages/LoginPage';
 import SignupPage from 'features/Auth/pages/SignupPage';
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 // Lazy load - Code splitting
 const Note = React.lazy(() => import('./features/Note'));

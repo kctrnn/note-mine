@@ -2,6 +2,8 @@ import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import './SelectMenu.scss';
 
+const MENU_HEIGHT = 150;
+
 const allowedTags = [
   {
     id: 'page-title',
@@ -30,9 +32,17 @@ const allowedTags = [
   },
 ];
 
-const SelectMenu = ({ oncloseMenu, onSelection }) => {
+const SelectMenu = ({ oncloseMenu, onSelection, position }) => {
   const [tagList, setTagList] = useState(allowedTags);
   const [selectedTag, setSelectedTag] = useState(null);
+
+  // If the tag selector menu is display outside the top viewport,
+  // we display it below the block
+  const isMenuOutsideOfTopViewport = position.y - MENU_HEIGHT < 0;
+  const y = !isMenuOutsideOfTopViewport
+    ? position.y - MENU_HEIGHT
+    : position.y + MENU_HEIGHT / 3;
+  const x = position.x;
 
   // Attach listener to allow tag selection via keyboard
   useEffect(() => {
@@ -69,7 +79,14 @@ const SelectMenu = ({ oncloseMenu, onSelection }) => {
   }, [tagList, selectedTag, onSelection, oncloseMenu]);
 
   return (
-    <div className='select-menu'>
+    <div
+      className='select-menu'
+      style={{
+        top: y,
+        left: x,
+        justifyContent: !isMenuOutsideOfTopViewport ? 'flex-end' : 'flex-start',
+      }}
+    >
       <div className='select-menu-items'>
         {tagList.map((tagItem, index) => {
           return (

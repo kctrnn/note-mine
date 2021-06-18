@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import './UserBar.scss';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -27,6 +28,8 @@ const UserBar = (props) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -40,13 +43,17 @@ const UserBar = (props) => {
     dispatch(action);
 
     history.push('/');
+
+    enqueueSnackbar('See you again 👋👋', {
+      variant: 'info',
+    });
   };
 
   return (
     <div className='user-bar'>
       <Logo size='small' disableBack />
 
-      <p className='user-bar-text'>{`🚀 Hello, ${loginInUser.username}`}</p>
+      <p className='user-bar-text'>{`🚀 Hello, ${loginInUser.username} `}</p>
 
       <IconButton
         color='inherit'

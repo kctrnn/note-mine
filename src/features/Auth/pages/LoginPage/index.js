@@ -54,7 +54,8 @@ const LoginPage = (props) => {
       const resultAction = await dispatch(action);
 
       const user = unwrapResult(resultAction);
-      enqueueSnackbar('Login successfully!!! 🎉', {
+
+      enqueueSnackbar('Login successfully 🎉🎉', {
         variant: 'success',
       });
 
