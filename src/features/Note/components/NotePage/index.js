@@ -201,10 +201,11 @@ const NotePage = ({ pageId }) => {
               return (
                 <NoteBlock
                   key={block.blockId}
-                  id={block.blockId}
                   position={position}
+                  id={block.blockId}
                   tag={block.tag}
                   html={block.html}
+                  imageUrl={block.imageUrl}
                   addBlock={addBlockHandler}
                   deleteBlock={deleteBlockHandler}
                   updateBlock={updateBlockHandler}

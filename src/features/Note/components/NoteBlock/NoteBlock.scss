@@ -39,8 +39,8 @@
       background: #f5f6fb;
       outline-color: #f5f6fb;
 
-      & + span {
-        opacity: 1;
+      & ~ span {
+        opacity: 0.5;
       }
     }
   }
@@ -80,5 +80,19 @@
     width: 3.6rem;
 
     object-fit: cover;
+  }
+
+  &-image {
+    & > label {
+      display: block;
+      padding: 0.8rem 0.4rem;
+      color: #888;
+      font-size: 1.4rem;
+      letter-spacing: 0.5px;
+    }
+
+    & > img {
+      object-fit: cover;
+    }
   }
 }

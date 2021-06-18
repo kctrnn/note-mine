@@ -38,6 +38,7 @@ class NoteBlock extends React.Component {
     this.state = {
       html: '',
       tag: 'p',
+      imageUrl: '',
 
       htmlBackup: null,
       previousKey: '',
@@ -212,11 +213,9 @@ class NoteBlock extends React.Component {
 
       try {
         const response = await blockApi.uploadImage(formData);
-
         const { url } = response[0].formats.small;
-        const imageUrl = process.env.REACT_APP_API_URL + url;
 
-        this.setState({ imageUrl: imageUrl });
+        this.setState({ imageUrl: url });
       } catch (error) {
         console.log(error);
       }
@@ -283,15 +282,10 @@ class NoteBlock extends React.Component {
 
                 {this.state.tag === 'img' && (
                   <div
+                    className='block-image'
                     data-position={this.props.position}
                     data-tag={this.state.tag}
                     ref={this.contentEditable}
-                    // className={[
-                    //   styles.image,
-                    //   this.state.actionMenuOpen || this.state.tagSelectorMenuOpen
-                    //     ? styles.blockSelected
-                    //     : null,
-                    // ].join(" ")}
                   >
                     <input
                       id={`${this.props.id}_fileInput`}
@@ -303,23 +297,19 @@ class NoteBlock extends React.Component {
                     />
 
                     {!this.state.imageUrl && (
-                      <label
-                        htmlFor={`${this.props.id}_fileInput`}
-                        // className={styles.fileInputLabel}
-                      >
+                      <label htmlFor={`${this.props.id}_fileInput`}>
                         No Image Selected. Click To Select
                       </label>
                     )}
 
-                    {this.state.imageUrl &&
-                      {
-                        /* <img
-                      src={
-                        process.env.NEXT_PUBLIC_API + "/" + this.state.imageUrl
-                      }
-                      alt={/[^\/]+(?=\.[^\/.]*$)/.exec(this.state.imageUrl)[0]}
-                    /> */
-                      }}
+                    {this.state.imageUrl && (
+                      <img
+                        src={
+                          process.env.REACT_APP_API_URL + this.state.imageUrl
+                        }
+                        alt=''
+                      />
+                    )}
                   </div>
                 )}
 
