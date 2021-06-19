@@ -1,5 +1,7 @@
+import { Button, makeStyles } from '@material-ui/core';
 import blockApi from 'api/blockApi';
 import usePrevious from 'hooks/usePrevious';
+import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
@@ -8,8 +10,6 @@ import setCaretToEnd from 'utils/setCaretToEnd';
 import uid from 'utils/uid';
 import NoteBlock from '../NoteBlock';
 import './NotePage.scss';
-import { Button, makeStyles } from '@material-ui/core';
-import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles(() => ({
   saveBtn: {
@@ -24,6 +24,7 @@ const useStyles = makeStyles(() => ({
 const NotePage = ({ pageId }) => {
   const [blocks, setBlocks] = useState([]);
   const [currentBlockId, setCurrentBlockId] = useState(null);
+  const [isSave, setIsSave] = useState(false);
 
   const userCurrent = useSelector((state) => state.user.current);
   const userId = userCurrent.id;
@@ -49,13 +50,8 @@ const NotePage = ({ pageId }) => {
     fetchBlockList(pageId);
   }, [pageId]);
 
-  useEffect(() => {
-    if (blocks !== prevBlocks) {
-      console.log(blocks);
-    }
-  }, [blocks, prevBlocks]);
-
   const handleSaveClick = () => {
+    setIsSave((x) => !x);
     const blockIds = blocks.map((block) => block.blockId);
 
     const fetchBlockList = async (pageId) => {
@@ -67,7 +63,7 @@ const NotePage = ({ pageId }) => {
           const position = blockIds.findIndex((id) => id === block.blockId) + 1;
 
           blockApi.update(block.id, {
-            ...block,
+            // ...block,
             position: `${position}${pageId}`,
           });
         });
@@ -128,8 +124,6 @@ const NotePage = ({ pageId }) => {
       imageUrl: currentBlock.imageUrl,
     };
 
-    setBlocks(updatedBlocks);
-
     const idBlock = blocks.find(
       (block) => block.blockId === currentBlock.id
     ).id;
@@ -137,6 +131,8 @@ const NotePage = ({ pageId }) => {
     blockApi.update(idBlock, {
       ...updatedBlocks[index],
     });
+
+    setBlocks(updatedBlocks);
   };
 
   const addBlockHandler = async (currentBlock) => {
@@ -211,6 +207,7 @@ const NotePage = ({ pageId }) => {
                     addBlock={addBlockHandler}
                     deleteBlock={deleteBlockHandler}
                     updateBlock={updateBlockHandler}
+                    isSave={isSave}
                   />
                 );
               })}

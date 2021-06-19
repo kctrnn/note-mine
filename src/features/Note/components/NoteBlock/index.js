@@ -15,8 +15,6 @@ class NoteBlock extends React.Component {
 
     this.onChangeHandler = this.onChangeHandler.bind(this);
     this.onKeyDownHandler = this.onKeyDownHandler.bind(this);
-    this.handleBlur = this.handleBlur.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
 
     this.openSelectMenuHandler = this.openSelectMenuHandler.bind(this);
     this.closeSelectMenuHandler = this.closeSelectMenuHandler.bind(this);
@@ -57,8 +55,6 @@ class NoteBlock extends React.Component {
         x: null,
         y: null,
       },
-
-      isTyping: false,
     };
   }
 
@@ -71,13 +67,13 @@ class NoteBlock extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const stoppedTyping = prevState.isTyping && !this.state.isTyping;
+    const enableSave = prevProps.isSave !== this.props.isSave;
 
     const htmlChanged = this.props.html !== this.state.html;
     const tagChanged = this.props.tag !== this.state.tag;
     const imageChanged = this.props.imageUrl !== this.state.imageUrl;
 
-    if ((stoppedTyping && htmlChanged) || tagChanged || imageChanged) {
+    if ((enableSave && htmlChanged) || tagChanged || imageChanged) {
       this.props.updateBlock({
         id: this.props.id,
 
@@ -94,14 +90,6 @@ class NoteBlock extends React.Component {
 
   onChangeHandler(e) {
     this.setState({ html: e.target.value });
-  }
-
-  handleFocus() {
-    this.setState({ isTyping: true });
-  }
-
-  handleBlur() {
-    this.setState({ isTyping: false });
   }
 
   onKeyDownHandler(e) {
@@ -270,8 +258,6 @@ class NoteBlock extends React.Component {
             onChange={this.onChangeHandler}
             onKeyDown={this.onKeyDownHandler}
             data-position={this.props.position}
-            onBlur={this.handleBlur}
-            onFocus={this.handleFocus}
           />
         )}
 
@@ -294,8 +280,6 @@ class NoteBlock extends React.Component {
                     onChange={this.onChangeHandler}
                     onKeyDown={this.onKeyDownHandler}
                     data-position={this.props.position}
-                    onBlur={this.handleBlur}
-                    onFocus={this.handleFocus}
                   />
                 )}
 
