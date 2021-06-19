@@ -1,15 +1,15 @@
+import { makeStyles } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import blockApi from 'api/blockApi';
 import pageApi from 'api/pageApi';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import uid from 'utils/uid';
 import NoteCard from '../../components/NoteCard';
 import UserBar from '../../components/UserBar';
-import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core';
-import blockApi from 'api/blockApi';
-import { useHistory } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   addPageBtn: {
     marginTop: '3rem',
     fontFamily: `'Poppins', sans-serif`,
@@ -49,7 +49,7 @@ const MainPage = () => {
         pid: page.id,
         pageId: page.pageId,
         date: new Date(page.updated_at),
-        title: blocks[0].html || 'Page title',
+        title: blocks[0]?.html || 'Page title',
         text: blocks
           .filter((block, index) => index !== 0)
           .map((block) => block.html),

@@ -15,11 +15,11 @@
   }
 
   &:hover > &-icon {
-    opacity: 0.5;
+    opacity: 1;
   }
 
   &.isDragging > &-icon {
-    opacity: 0.5;
+    opacity: 1;
   }
 
   &.isDragging > &-text {
@@ -40,7 +40,7 @@
       outline-color: #f5f6fb;
 
       & ~ span {
-        opacity: 0.5;
+        opacity: 1;
       }
     }
   }
@@ -73,16 +73,15 @@
 
   &-icon {
     opacity: 0;
-    color: #777;
-    padding: 1rem;
+    // color: #000;
+    padding: 1rem 1.5rem;
     margin-left: 1rem;
-
-    width: 3.6rem;
-
-    object-fit: cover;
   }
 
   &-image {
+    padding: 0.25rem;
+    flex: 1;
+
     & > label {
       display: block;
       padding: 0.8rem 0.4rem;

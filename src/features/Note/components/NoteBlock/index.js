@@ -1,7 +1,7 @@
 import blockApi from 'api/blockApi';
 import classNames from 'classnames';
 import Icons from 'constants/icons';
-import React from 'react';
+import React, { createRef } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import ContentEditable from 'react-contenteditable';
 import setCaretToEnd from 'utils/setCaretToEnd';
@@ -35,7 +35,7 @@ class NoteBlock extends React.Component {
 
     this.handleImageUpload = this.handleImageUpload.bind(this);
 
-    this.contentEditable = React.createRef();
+    this.contentEditable = createRef();
     this.fileInput = null;
 
     this.state = {
@@ -266,7 +266,7 @@ class NoteBlock extends React.Component {
             className='block-text title'
             innerRef={this.contentEditable}
             html={this.state.html}
-            tagName='h1'
+            tagName={this.state.tag}
             onChange={this.onChangeHandler}
             onKeyDown={this.onKeyDownHandler}
             data-position={this.props.position}
@@ -303,7 +303,6 @@ class NoteBlock extends React.Component {
                   <div
                     className='block-image'
                     data-position={this.props.position}
-                    data-tag={this.state.tag}
                     ref={this.contentEditable}
                   >
                     <input

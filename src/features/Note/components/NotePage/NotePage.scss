@@ -1,5 +1,7 @@
 .note-page {
-  // position: relative;
   padding: 1.5rem;
-  // height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

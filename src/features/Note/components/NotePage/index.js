@@ -3,20 +3,39 @@ import usePrevious from 'hooks/usePrevious';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { useSelector } from 'react-redux';
 import setCaretToEnd from 'utils/setCaretToEnd';
 import uid from 'utils/uid';
 import NoteBlock from '../NoteBlock';
 import './NotePage.scss';
+import { Button, makeStyles } from '@material-ui/core';
+import { useSnackbar } from 'notistack';
+
+const useStyles = makeStyles(() => ({
+  saveBtn: {
+    alignSelf: 'flex-end',
+    marginTop: '5rem',
+    fontSize: '1.4rem',
+    fontFamily: `'Poppins', sans-serif`,
+    textTransform: 'none',
+  },
+}));
 
 const NotePage = ({ pageId }) => {
   const [blocks, setBlocks] = useState([]);
   const [currentBlockId, setCurrentBlockId] = useState(null);
 
-  const pid = 5;
-  const userId = 2;
+  const userCurrent = useSelector((state) => state.user.current);
+  const userId = userCurrent.id;
+  const { pages } = userCurrent;
+  const pid = pages.find((page) => page.pageId === pageId).id;
 
   const prevBlocks = usePrevious(blocks);
 
+  const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+
+  // fetch blocks by pageId
   useEffect(() => {
     const fetchBlockList = async (pageId) => {
       try {
@@ -32,6 +51,7 @@ const NotePage = ({ pageId }) => {
 
   useEffect(() => {
     if (blocks !== prevBlocks) {
+      console.log(blocks);
     }
   }, [blocks, prevBlocks]);
 
@@ -42,6 +62,7 @@ const NotePage = ({ pageId }) => {
       try {
         const response = await blockApi.getByPageId(pageId);
         const proBlocks = [...response];
+
         proBlocks.forEach((block) => {
           const position = blockIds.findIndex((id) => id === block.blockId) + 1;
 
@@ -56,6 +77,10 @@ const NotePage = ({ pageId }) => {
     };
 
     fetchBlockList(pageId);
+
+    enqueueSnackbar('Save successfully 🥰🥰', {
+      variant: 'info',
+    });
   };
 
   // Handling the cursor and focus on adding and deleting blocks
@@ -105,19 +130,18 @@ const NotePage = ({ pageId }) => {
 
     setBlocks(updatedBlocks);
 
-    // const idBlock = blocks.find(
-    //   (block) => block.blockId === currentBlock.id
-    // )?.id;
+    const idBlock = blocks.find(
+      (block) => block.blockId === currentBlock.id
+    ).id;
 
-    // if (idBlock) {
-    //   blockApi.update(idBlock, {
-    //     ...updatedBlocks[index],
-    //   });
-    // }
+    blockApi.update(idBlock, {
+      ...updatedBlocks[index],
+    });
   };
 
-  const addBlockHandler = (currentBlock) => {
+  const addBlockHandler = async (currentBlock) => {
     setCurrentBlockId(currentBlock.id);
+
     const index = blocks.map((b) => b.blockId).indexOf(currentBlock.id);
     const updatedBlocks = [...blocks];
     const newBlock = {
@@ -129,17 +153,8 @@ const NotePage = ({ pageId }) => {
       creator: userId,
     };
 
-    blockApi.add(newBlock);
-
-    updatedBlocks.splice(index + 1, 0, newBlock);
-
-    updatedBlocks[index] = {
-      ...updatedBlocks[index],
-
-      tag: currentBlock.tag,
-      html: currentBlock.html,
-      imageUrl: currentBlock.imageUrl,
-    };
+    const newProBlock = await blockApi.add(newBlock);
+    updatedBlocks.splice(index + 1, 0, newProBlock);
 
     setBlocks(updatedBlocks);
   };
@@ -150,25 +165,14 @@ const NotePage = ({ pageId }) => {
     const index = blocks.map((block) => block.blockId).indexOf(currentBlock.id);
     const updatedBlocks = [...blocks];
 
-    if (blocks.length === 1) {
-      updatedBlocks.push({
-        blockId: uid(),
-        tag: 'h1',
-        html: '',
-        imageUrl: '',
-        page: pid,
-        creator: userId,
-      });
-    }
-
     const idBlock = blocks.find(
       (block) => block.blockId === currentBlock.id
     ).id;
-    blockApi.delete(idBlock);
 
     updatedBlocks.splice(index, 1);
 
     setBlocks(updatedBlocks);
+    blockApi.delete(idBlock);
   };
 
   const handleDragEnd = (result) => {
@@ -186,40 +190,47 @@ const NotePage = ({ pageId }) => {
   };
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <Droppable droppableId={pageId}>
-        {(provided, snapshot) => (
-          <div
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            className='note-page'
-          >
-            {blocks.map((block) => {
-              const position =
-                blocks.map((block) => block.blockId).indexOf(block.blockId) + 1;
+    <div className='note-page'>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId={pageId}>
+          {(provided, snapshot) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {blocks.map((block) => {
+                const position =
+                  blocks.map((block) => block.blockId).indexOf(block.blockId) +
+                  1;
 
-              return (
-                <NoteBlock
-                  key={block.blockId}
-                  position={position}
-                  id={block.blockId}
-                  tag={block.tag}
-                  html={block.html}
-                  imageUrl={block.imageUrl}
-                  addBlock={addBlockHandler}
-                  deleteBlock={deleteBlockHandler}
-                  updateBlock={updateBlockHandler}
-                />
-              );
-            })}
+                return (
+                  <NoteBlock
+                    key={block.blockId}
+                    position={position}
+                    id={block.blockId}
+                    tag={block.tag}
+                    html={block.html}
+                    imageUrl={block.imageUrl}
+                    addBlock={addBlockHandler}
+                    deleteBlock={deleteBlockHandler}
+                    updateBlock={updateBlockHandler}
+                  />
+                );
+              })}
 
-            {provided.placeholder}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
 
-            <button onClick={handleSaveClick}>Save</button>
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+      <Button
+        variant='contained'
+        color='primary'
+        className={classes.saveBtn}
+        onClick={handleSaveClick}
+        disableElevation
+      >
+        Save
+      </Button>
+    </div>
   );
 };
 
