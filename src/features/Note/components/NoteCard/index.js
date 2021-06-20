@@ -1,6 +1,7 @@
 import { IconButton, makeStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import blockApi from 'api/blockApi';
 import pageApi from 'api/pageApi';
 import React from 'react';
 import ContentEditable from 'react-contenteditable';
@@ -40,8 +41,17 @@ const NoteCard = ({ title, text, date, pageId, pid }) => {
 
   const handleDeleteCardClick = async () => {
     try {
-      const response = await pageApi.delete(pid);
-      console.log('Deleted page: ', response);
+      const deletedPage = await pageApi.get(pid);
+      const deletedBlockIds = deletedPage.blocks.map((block) => block.id);
+
+      await pageApi.delete(pid);
+
+      if (deletedBlockIds > 0) {
+        deletedBlockIds.forEach((id) => {
+          blockApi.delete(id);
+        });
+      }
+
       history.go(0);
     } catch (error) {
       console.log(error);

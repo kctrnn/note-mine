@@ -1,3 +1,5 @@
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { withStyles } from '@material-ui/core/styles';
 import blockApi from 'api/blockApi';
 import classNames from 'classnames';
 import Icons from 'constants/icons';
@@ -8,8 +10,6 @@ import setCaretToEnd from 'utils/setCaretToEnd';
 import ActionMenu from '../ActionMenu';
 import SelectMenu from '../SelectMenu';
 import './NoteBlock.scss';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { withStyles } from '@material-ui/core/styles';
 
 const styles = () => ({
   progress: {
@@ -50,7 +50,7 @@ class NoteBlock extends React.Component {
       imageUrl: '',
 
       htmlBackup: null,
-      previousKey: '',
+      previousKey: null,
 
       selectMenuIsOpen: false,
       selectMenuPosition: {
@@ -109,23 +109,19 @@ class NoteBlock extends React.Component {
       !this.state.selectMenuIsOpen
     ) {
       e.preventDefault();
-
-      this.props.addBlock({
-        id: this.props.id,
-
-        html: this.state.html,
-        tag: this.state.tag,
-        imageUrl: this.state.imageUrl,
-        ref: this.contentEditable.current,
-      });
+      this.props.addBlock({ id: this.props.id });
     }
 
     this.setState({ previousKey: e.key });
   }
 
   handleDragIconClick(e) {
-    const dragHandle = e.target;
-    this.openActionMenu(dragHandle);
+    if (this.state.actionMenuIsOpen) {
+      this.closeActionMenu();
+    } else {
+      const dragHandle = e.target;
+      this.openActionMenu(dragHandle);
+    }
   }
 
   openActionMenu(parent) {
@@ -163,8 +159,6 @@ class NoteBlock extends React.Component {
     setTimeout(() => {
       document.addEventListener('click', this.closeSelectMenuHandler);
     }, 100);
-
-    // document.addEventListener('click', this.closeSelectMenuHandler);
   }
 
   closeSelectMenuHandler() {
@@ -184,19 +178,12 @@ class NoteBlock extends React.Component {
         this.closeSelectMenuHandler();
 
         if (this.fileInput) {
-          // Open the native file picker
           this.fileInput.click();
         }
+
         // Add new block so that the user can continue writing
         // after adding an image
-        this.props.addBlock({
-          id: this.props.id,
-
-          html: '',
-          tag: 'p',
-          imageUrl: '',
-          ref: this.contentEditable.current,
-        });
+        this.props.addBlock({ id: this.props.id });
       });
     } else {
       this.setState({ tag: tag, html: this.state.htmlBackup }, () => {
@@ -285,6 +272,7 @@ class NoteBlock extends React.Component {
             onChange={this.onChangeHandler}
             onKeyDown={this.onKeyDownHandler}
             data-position={this.props.position}
+            data-tag={this.state.tag}
           />
         )}
 
@@ -307,6 +295,7 @@ class NoteBlock extends React.Component {
                     onChange={this.onChangeHandler}
                     onKeyDown={this.onKeyDownHandler}
                     data-position={this.props.position}
+                    data-tag={this.state.tag}
                   />
                 )}
 
@@ -314,6 +303,7 @@ class NoteBlock extends React.Component {
                   <div
                     className='block-image'
                     data-position={this.props.position}
+                    data-tag={this.state.tag}
                     ref={this.contentEditable}
                   >
                     <input
@@ -344,7 +334,9 @@ class NoteBlock extends React.Component {
                         src={
                           process.env.REACT_APP_API_URL + this.state.imageUrl
                         }
-                        alt=''
+                        alt={
+                          /[^\/]+(?=\.[^\/.]*$)/.exec(this.state.imageUrl)[0]
+                        }
                       />
                     )}
                   </div>

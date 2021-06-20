@@ -113,7 +113,7 @@ const NotePage = ({ pageId }) => {
 
   const updateBlockHandler = async (currentBlock) => {
     const index = blocks.map((b) => b.blockId).indexOf(currentBlock.id);
-    // const oldBlock = blocks[index];
+    const oldBlock = blocks[index];
     const updatedBlocks = [...blocks];
 
     updatedBlocks[index] = {
@@ -133,12 +133,17 @@ const NotePage = ({ pageId }) => {
     });
 
     setBlocks(updatedBlocks);
+
+    if (oldBlock.imageUrl && oldBlock.imageUrl !== currentBlock.imageUrl) {
+      deleteImageOnServer(oldBlock.imageUrl);
+    }
   };
 
   const addBlockHandler = async (currentBlock) => {
     setCurrentBlockId(currentBlock.id);
 
     const index = blocks.map((b) => b.blockId).indexOf(currentBlock.id);
+
     const updatedBlocks = [...blocks];
     const newBlock = {
       blockId: uid(),
@@ -159,6 +164,7 @@ const NotePage = ({ pageId }) => {
     setCurrentBlockId(currentBlock.id);
 
     const index = blocks.map((block) => block.blockId).indexOf(currentBlock.id);
+    const deletedBlock = blocks[index];
     const updatedBlocks = [...blocks];
 
     const idBlock = blocks.find(
@@ -168,6 +174,10 @@ const NotePage = ({ pageId }) => {
     updatedBlocks.splice(index, 1);
 
     setBlocks(updatedBlocks);
+    if (deletedBlock.tag === 'img' && deletedBlock.imageUrl) {
+      deleteImageOnServer(deletedBlock.imageUrl);
+    }
+
     blockApi.delete(idBlock);
   };
 
@@ -183,6 +193,22 @@ const NotePage = ({ pageId }) => {
     updatedBlocks.splice(destination.index - 1, 0, removedBlocks[0]);
 
     setBlocks(updatedBlocks);
+  };
+
+  const deleteImageOnServer = async (imageUrl) => {
+    try {
+      const url = imageUrl.replace('small_', '');
+      const res = await blockApi.getImages({
+        url: url,
+      });
+      const { id } = res[0];
+
+      if (id) {
+        await blockApi.deleteImage(id);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

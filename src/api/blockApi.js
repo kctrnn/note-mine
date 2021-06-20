@@ -35,6 +35,16 @@ const blockApi = {
     const url = '/upload';
     return axiosClient.post(url, data, options);
   },
+
+  deleteImage: (id) => {
+    const url = `/upload/files/${id}`;
+    return axiosClient.delete(url);
+  },
+
+  getImages: (params) => {
+    const url = '/upload/files';
+    return axiosClient.get(url, { params });
+  },
 };
 
 export default blockApi;
