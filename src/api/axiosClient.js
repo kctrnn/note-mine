@@ -8,6 +8,12 @@ const axiosClient = axios.create({
     'content-type': 'application/json',
   },
   paramsSerializer: (params) => queryString.stringify(params),
+
+  // onUploadProgress: (progressEvent) => {
+  //   const { loaded, total } = progressEvent;
+  //   let percent = Math.round((loaded * 100) / total);
+  //   console.log(`${percent}%`);
+  // },
 });
 
 // Add a request interceptor

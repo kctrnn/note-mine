@@ -8,6 +8,14 @@ import setCaretToEnd from 'utils/setCaretToEnd';
 import ActionMenu from '../ActionMenu';
 import SelectMenu from '../SelectMenu';
 import './NoteBlock.scss';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = () => ({
+  progress: {
+    margin: '1rem 0',
+  },
+});
 
 class NoteBlock extends React.Component {
   constructor(props) {
@@ -55,6 +63,8 @@ class NoteBlock extends React.Component {
         x: null,
         y: null,
       },
+
+      progress: 0,
     };
   }
 
@@ -219,11 +229,26 @@ class NoteBlock extends React.Component {
       const formData = new FormData();
       formData.append('files', imageFile);
 
+      const options = {
+        onUploadProgress: (progressEvent) => {
+          const { loaded, total } = progressEvent;
+          let percent = Math.round((loaded * 100) / total);
+
+          if (percent < 100) {
+            this.setState({ progress: percent });
+          }
+        },
+      };
+
       try {
-        const response = await blockApi.uploadImage(formData);
+        const response = await blockApi.uploadImage(formData, options);
         const { url } = response[0].formats.small;
 
-        this.setState({ imageUrl: url });
+        this.setState({ imageUrl: url, progress: 100 }, () => {
+          setTimeout(() => {
+            this.setState({ progress: 0 });
+          }, 1000);
+        });
       } catch (error) {
         console.log(error);
       }
@@ -231,6 +256,8 @@ class NoteBlock extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
+
     return (
       <div className='note-block'>
         {this.state.selectMenuIsOpen && (
@@ -254,7 +281,7 @@ class NoteBlock extends React.Component {
             className='block-text title'
             innerRef={this.contentEditable}
             html={this.state.html}
-            tagName={this.state.tag}
+            tagName='h1'
             onChange={this.onChangeHandler}
             onKeyDown={this.onKeyDownHandler}
             data-position={this.props.position}
@@ -298,10 +325,18 @@ class NoteBlock extends React.Component {
                       hidden
                     />
 
-                    {!this.state.imageUrl && (
+                    {!this.state.imageUrl && this.state.progress === 0 && (
                       <label htmlFor={`${this.props.id}_fileInput`}>
                         No Image Selected. Click To Select
                       </label>
+                    )}
+
+                    {this.state.progress > 0 && (
+                      <LinearProgress
+                        variant='determinate'
+                        value={this.state.progress}
+                        className={classes.progress}
+                      />
                     )}
 
                     {this.state.imageUrl && (
@@ -331,4 +366,4 @@ class NoteBlock extends React.Component {
   }
 }
 
-export default NoteBlock;
+export default withStyles(styles)(NoteBlock);

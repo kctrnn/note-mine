@@ -31,9 +31,9 @@ const blockApi = {
     return axiosClient.put(url, data);
   },
 
-  uploadImage: (data) => {
+  uploadImage: (data, options) => {
     const url = '/upload';
-    return axiosClient.post(url, data);
+    return axiosClient.post(url, data, options);
   },
 };
 
