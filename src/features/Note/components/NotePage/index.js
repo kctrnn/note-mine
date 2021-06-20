@@ -1,5 +1,6 @@
 import { Button, makeStyles } from '@material-ui/core';
 import blockApi from 'api/blockApi';
+import pageApi from 'api/pageApi';
 import usePrevious from 'hooks/usePrevious';
 import { useSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
@@ -25,16 +26,32 @@ const NotePage = ({ pageId }) => {
   const [blocks, setBlocks] = useState([]);
   const [currentBlockId, setCurrentBlockId] = useState(null);
   const [isSave, setIsSave] = useState(false);
+  const [pid, setPid] = useState(null);
 
   const userCurrent = useSelector((state) => state.user.current);
   const userId = userCurrent.id;
-  const { pages } = userCurrent;
-  const pid = pages.find((page) => page.pageId === pageId).id;
 
   const prevBlocks = usePrevious(blocks);
 
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    const fetchPageCurrent = async (pageId) => {
+      try {
+        const res = await pageApi.getAll({
+          pageId: pageId,
+        });
+
+        const pid = res[0].id;
+        setPid(pid);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchPageCurrent(pageId);
+  }, [pageId]);
 
   // fetch blocks by pageId
   useEffect(() => {

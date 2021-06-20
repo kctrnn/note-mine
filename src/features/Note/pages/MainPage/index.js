@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Paper } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import blockApi from 'api/blockApi';
 import pageApi from 'api/pageApi';
@@ -16,12 +16,32 @@ const useStyles = makeStyles(() => ({
     fontSize: '1.4rem',
     textTransform: 'none',
   },
+
+  paper: {
+    backgroundColor: '#fffaf0',
+    color: '#975a16',
+    padding: '2rem',
+    borderRadius: '1rem',
+
+    '& > h3': {
+      fontSize: '1.8rem',
+      fontWeight: '600',
+      marginBottom: '2rem',
+    },
+
+    '& > p': {
+      fontWeight: '400',
+      fontSize: '1.6rem',
+    },
+  },
 }));
 
 const MainPage = () => {
   const [pageList, setPageList] = useState([]);
   const classes = useStyles();
   const history = useHistory();
+
+  const [noteList, setNoteList] = useState([]);
 
   const loggedInUser = useSelector((state) => state.user.current);
   const userId = loggedInUser.id;
@@ -32,7 +52,24 @@ const MainPage = () => {
         const response = await pageApi.getAll({
           [`creator.id`]: userId,
         });
+
+        const cardList = response.map((page) => {
+          const blocks = page.blocks;
+          const note = {
+            pid: page.id,
+            pageId: page.pageId,
+            date: new Date(page.updated_at),
+            title: blocks[0]?.html || 'Page title',
+            text: blocks
+              .filter((block, index) => index !== 0)
+              .map((block) => block.html),
+          };
+
+          return note;
+        });
+
         setPageList(response);
+        setNoteList(cardList);
       } catch (error) {
         console.log(error);
       }
@@ -40,25 +77,6 @@ const MainPage = () => {
 
     fetchPageList();
   }, [userId]);
-
-  const noteList =
-    !!pageList.length &&
-    pageList.map((page) => {
-      const blocks = page.blocks;
-      const note = {
-        pid: page.id,
-        pageId: page.pageId,
-        date: new Date(page.updated_at),
-        title: blocks[0]?.html || 'Page title',
-        text: blocks
-          .filter((block, index) => index !== 0)
-          .map((block) => block.html),
-      };
-
-      return note;
-    });
-
-  console.log(noteList);
 
   const handleNewPageClick = async () => {
     const newBlock = {
@@ -93,7 +111,15 @@ const MainPage = () => {
 
       <h1 style={{ marginBottom: '4rem', fontWeight: '600' }}>Notes</h1>
 
-      {noteList &&
+      {noteList.length === 0 && (
+        <Paper elevation={0} className={classes.paper}>
+          <h3>Let's go!</h3>
+          <p>Seems like you haven't created any pages so far</p>
+          <p>Click the button below to get started 🎬🎬</p>
+        </Paper>
+      )}
+
+      {noteList.length > 0 &&
         noteList.map((note, index) => <NoteCard key={index} {...note} />)}
 
       <Button
