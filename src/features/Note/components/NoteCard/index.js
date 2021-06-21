@@ -69,7 +69,10 @@ const NoteCard = ({ title, text, date, pageId, pid, image }) => {
         </div>
       )}
       <div className='card-content'>
-        <p className='card-date'>{formattedDate}</p>
+        <p className='card-date'>
+          <span>Create at</span>
+          {formattedDate}
+        </p>
         <h3 className='card-title'>{title}</h3>
         <div className='card-desc'>
           {text.map((blockHtml, index) => (
