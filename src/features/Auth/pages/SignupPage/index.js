@@ -30,7 +30,7 @@ const SignupPage = () => {
 
       history.push('/notes');
     } catch (error) {
-      console.log('Failed to login:', error);
+      console.log('Failed to signup:', error);
       enqueueSnackbar(error.message, { variant: 'error' });
     }
   };

@@ -7,7 +7,7 @@ const userApi = {
   },
 
   signup: (payload) => {
-    const url = 'auth/local/register';
+    const url = '/auth/local/register';
     return axiosClient.post(url, payload);
   },
 };
