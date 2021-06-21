@@ -13,7 +13,7 @@ import { Route, Switch } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   progress: {
-    maxWidth: '30vw',
+    maxWidth: '50vw',
     margin: '0 auto',
     marginTop: '30rem',
 

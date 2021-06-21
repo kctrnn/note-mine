@@ -55,6 +55,10 @@ const MainPage = () => {
 
         const cardList = response.map((page) => {
           const blocks = page.blocks;
+          blocks.sort((a, b) =>
+            a.position > b.position ? 1 : b.position > a.position ? -1 : 0
+          );
+
           const note = {
             pid: page.id,
             pageId: page.pageId,
@@ -63,6 +67,7 @@ const MainPage = () => {
             text: blocks
               .filter((block, index) => index !== 0)
               .map((block) => block.html),
+            image: blocks.find((block) => !!block.imageUrl)?.imageUrl,
           };
 
           return note;
