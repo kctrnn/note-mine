@@ -7,8 +7,8 @@ import ForgotPasswordPage from 'features/Auth/pages/ForgotPasswordPage';
 import LoginPage from 'features/Auth/pages/LoginPage';
 import ResetPasswordPage from 'features/Auth/pages/ResetPasswordPage';
 import SignupPage from 'features/Auth/pages/SignupPage';
+import UpdateUserPage from 'features/Auth/pages/UpdateUserPage';
 import React, { Suspense, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
@@ -37,9 +37,6 @@ function App() {
   const [data, setData] = useState([]);
   const classes = useStyles();
 
-  const loggedInUser = useSelector((state) => state.user.current);
-  const isLoggedIn = !!loggedInUser.id;
-
   // Because the server is created by Heroku, it will sleep after 30 minutes of inactivity.
   //So before the App comes out, we call an api to wake up the server
   useEffect(() => {
@@ -59,7 +56,7 @@ function App() {
 
   return (
     <div className='note-mine-app' style={{ position: 'relative' }}>
-      {data.length === 0 && !isLoggedIn && (
+      {data.length === 0 && (
         <Box className={classes.progress}>
           <p>
             Server is waking up...
@@ -89,6 +86,8 @@ function App() {
             <Route path='/reset-password' component={ResetPasswordPage} />
 
             <Route path='/notes' component={Note} />
+
+            <Route path='/:username' component={UpdateUserPage} />
 
             <Route component={NotFound} />
           </Switch>

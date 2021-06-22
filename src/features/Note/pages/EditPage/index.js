@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
 
   root: {
     maxWidth: '50vw',
-    margin: '0 auto',
+    margin: '0 auto 10rem',
 
     '@media screen and (max-width: 991px)': {
       maxWidth: '60vw',

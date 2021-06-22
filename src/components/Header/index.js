@@ -74,14 +74,14 @@ const Header = () => {
             )}
 
             {isLoggedIn && (
-              <Link to='/notes' className='nav-link'>
-                All notes
+              <Link to='' className='nav-link' onClick={handleLogoutClick}>
+                Logout
               </Link>
             )}
 
             {isLoggedIn && (
-              <Link to='' className='nav-link' onClick={handleLogoutClick}>
-                Logout
+              <Link to='/notes' className='nav-link'>
+                All notes
               </Link>
             )}
           </div>

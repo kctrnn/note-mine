@@ -111,7 +111,7 @@ const SignupForm = ({ onSubmit }) => {
 
       <PasswordField
         name='rePassword'
-        label='Confirmation Password'
+        label='Confirmation password'
         form={form}
         type='password'
       />
