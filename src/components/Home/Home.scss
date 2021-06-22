@@ -8,6 +8,10 @@
   font-weight: 400;
   font-size: 1.6rem;
 
+  @media screen and (max-width: 767px) {
+    padding-bottom: 8rem;
+  }
+
   &-title {
     font-size: 5.5rem;
     text-transform: uppercase;
@@ -16,12 +20,11 @@
 
     @media screen and (max-width: 767px) {
       font-size: 4.5rem;
-      margin-top: 3rem;
+      margin-top: 5rem;
     }
 
     @media screen and (max-width: 575px) {
       font-size: 4rem;
-      margin-top: 5rem;
     }
   }
 
@@ -113,8 +116,3 @@
     background-color: #fff;
   }
 }
-
-// .welcome-page {
-//   overflow-y: hidden;
-//   height: 100vh;
-// }

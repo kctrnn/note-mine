@@ -8,25 +8,27 @@
   }
 
   &-nav {
-    @media screen and (max-width: 575px) {
-      transform: translateX(100%);
-      transition: transform 300ms ease-in-out;
+    @media screen and (max-width: 767px) {
+      transition: max-height 300ms ease-in-out;
 
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
 
       position: absolute;
       right: 0;
       top: 10vh;
 
-      // border: 1px solid #333;
-      // padding: 1rem;
-      // border-radius: 0.5rem;
+      background-color: #8093f1;
+
+      width: 100%;
+      max-height: 0;
+      overflow: hidden;
+      margin-top: 1rem;
 
       &.show {
-        transform: translateX(-2rem);
+        max-height: 15rem;
       }
     }
   }
@@ -45,8 +47,39 @@
     color: #fff;
   }
 
-  @media screen and (max-width: 575px) {
+  &.username {
+    cursor: auto;
+    border-right: 2px solid #777;
+    padding-right: 1.5rem;
+  }
+
+  @media screen and (max-width: 767px) {
     margin-left: 0;
-    margin-bottom: 1rem;
+    width: 100%;
+    padding: 1rem 2rem;
+    color: rgba(255, 255, 255, 0.9);
+
+    transition: background-color 300ms ease-in-out;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.2);
+      color: #fff;
+    }
+
+    &:last-child {
+      background-color: transparent;
+      color: rgba(255, 255, 255, 0.9);
+      padding: 1rem 2rem;
+      border-radius: 0;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.2);
+        color: #fff;
+      }
+    }
+
+    &.username {
+      border-right: 0;
+    }
   }
 }

@@ -10,6 +10,23 @@ import NoteCard from '../../components/NoteCard';
 import UserBar from '../../components/UserBar';
 
 const useStyles = makeStyles(() => ({
+  root: {
+    maxWidth: '50vw',
+    margin: '0 auto 8rem',
+
+    '@media screen and (max-width: 991px)': {
+      maxWidth: '60vw',
+    },
+
+    '@media screen and (max-width: 767px)': {
+      maxWidth: '70vw',
+    },
+
+    '@media screen and (max-width: 575px)': {
+      maxWidth: '90vw',
+    },
+  },
+
   addPageBtn: {
     marginTop: '3rem',
     fontFamily: `'Poppins', sans-serif`,
@@ -32,6 +49,15 @@ const useStyles = makeStyles(() => ({
     '& > p': {
       fontWeight: '400',
       fontSize: '1.6rem',
+    },
+  },
+
+  helloUser: {
+    display: 'none',
+
+    '@media screen and (max-width: 575px)': {
+      display: 'block',
+      textAlign: 'right',
     },
   },
 }));
@@ -108,11 +134,12 @@ const MainPage = () => {
   };
 
   return (
-    <div
-      className='note-main'
-      style={{ maxWidth: '50vw', margin: '0 auto 8rem' }}
-    >
+    <div className={classes.root}>
       {!!userId && <UserBar />}
+
+      <p
+        className={classes.helloUser}
+      >{`🚀 Hello, ${loggedInUser.username} `}</p>
 
       <h1 style={{ marginBottom: '4rem', fontWeight: '600' }}>Notes</h1>
 

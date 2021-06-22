@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
   burger: {
     display: 'none',
 
-    '@media screen and (max-width: 575px)': {
+    '@media screen and (max-width: 767px)': {
       display: 'block',
     },
   },
@@ -64,6 +64,13 @@ const Header = () => {
               <Link to='/signup' className='nav-link'>
                 Sign up
               </Link>
+            )}
+
+            {isLoggedIn && (
+              <Link
+                to=''
+                className='nav-link username'
+              >{`🚀 Logged in with ${loggedInUser.username}`}</Link>
             )}
 
             {isLoggedIn && (
