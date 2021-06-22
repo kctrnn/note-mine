@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NoteCard = ({ title, text, date, pageId, pid, image }) => {
+const NoteCard = ({ title, text, date, pageId, pid, imageUrl }) => {
   const formattedDate = `${
     MONTHS[date.getMonth()]
   } ${date.getDate()}, ${date.getFullYear()}`;
@@ -60,14 +60,12 @@ const NoteCard = ({ title, text, date, pageId, pid, image }) => {
 
   return (
     <Paper className={classes.noteCard} variant='outlined'>
-      {image && (
+      {imageUrl && (
         <div className='card-image'>
-          <img
-            src={process.env.REACT_APP_API_URL + image.replace('small_', '')}
-            alt=''
-          />
+          <img src={imageUrl} alt='' />
         </div>
       )}
+
       <div className='card-content'>
         <p className='card-date'>
           <span>Create at</span>

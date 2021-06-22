@@ -93,7 +93,7 @@ const MainPage = () => {
             text: blocks
               .filter((block, index) => index !== 0)
               .map((block) => block.html),
-            image: blocks.find((block) => !!block.imageUrl)?.imageUrl,
+            imageUrl: blocks.find((block) => !!block.imageUrl)?.imageUrl,
           };
 
           return note;

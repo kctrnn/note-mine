@@ -214,11 +214,11 @@ const NotePage = ({ pageId }) => {
 
   const deleteImageOnServer = async (imageUrl) => {
     try {
-      const url = imageUrl.replace('small_', '');
       const res = await blockApi.getImages({
-        url: url,
+        url: imageUrl,
       });
       const { id } = res[0];
+      console.log(id);
 
       if (id) {
         await blockApi.deleteImage(id);

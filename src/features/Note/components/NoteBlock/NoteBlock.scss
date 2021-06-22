@@ -91,6 +91,7 @@
     }
 
     & > img {
+      max-height: 50rem;
       object-fit: cover;
     }
   }

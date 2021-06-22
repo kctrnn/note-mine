@@ -229,7 +229,8 @@ class NoteBlock extends React.Component {
 
       try {
         const response = await blockApi.uploadImage(formData, options);
-        const { url } = response[0].formats.small;
+        // const { url } = response[0].formats.small;
+        const { url } = response[0];
 
         this.setState({ imageUrl: url, progress: 100 }, () => {
           setTimeout(() => {
@@ -331,9 +332,7 @@ class NoteBlock extends React.Component {
 
                     {this.state.imageUrl && (
                       <img
-                        src={
-                          process.env.REACT_APP_API_URL + this.state.imageUrl
-                        }
+                        src={this.state.imageUrl}
                         alt={
                           /[^\/]+(?=\.[^\/.]*$)/.exec(this.state.imageUrl)[0]
                         }
