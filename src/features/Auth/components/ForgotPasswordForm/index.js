@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import InputField from 'components/form-controls/InputField';
+import { useSnackbar } from 'notistack';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -24,7 +25,15 @@ const ForgotPasswordForm = (props) => {
     formState: { isSubmitting },
   } = form;
 
-  const onSubmit = (data) => console.log(data);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const onSubmit = (data) => {
+    console.log(data);
+
+    enqueueSnackbar('Sorry this feature is not finished 😥😥', {
+      variant: 'info',
+    });
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='form'>

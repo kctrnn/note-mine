@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { makeStyles } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import CheckboxField from 'components/form-controls/CheckboxField';
 import InputField from 'components/form-controls/InputField';
 import PasswordField from 'components/form-controls/PasswordField';
 import PropTypes from 'prop-types';
@@ -68,7 +67,7 @@ const LoginForm = ({ onSubmit }) => {
         isForgotMode
       />
 
-      <CheckboxField name='rememberMe' label='Remember me' form={form} />
+      {/* <CheckboxField name='rememberMe' label='Remember me' form={form} /> */}
 
       <button type='submit' className='form-button' disabled={isSubmitting}>
         Log in
