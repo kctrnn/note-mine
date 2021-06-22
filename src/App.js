@@ -18,7 +18,8 @@ const useStyles = makeStyles(() => ({
     marginTop: '30rem',
 
     '& > p': {
-      marginBottom: '1rem',
+      marginBottom: '2rem',
+      lineHeight: '1.8',
     },
   },
 
@@ -60,7 +61,12 @@ function App() {
     <div className='note-mine-app' style={{ position: 'relative' }}>
       {data.length === 0 && !isLoggedIn && (
         <Box className={classes.progress}>
-          <p>Server is waking up...</p>
+          <p>
+            Server is waking up...
+            <br />
+            don't leave please 😢😢
+          </p>
+
           <LinearProgress />
         </Box>
       )}
