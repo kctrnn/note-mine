@@ -38,6 +38,10 @@ const UserBar = (props) => {
     setAnchorEl(null);
   };
 
+  const handleMyAccountClick = () => {
+    history.push(`/${loggedInUser.username}`);
+  };
+
   const handleLogoutClick = () => {
     const action = logout();
     dispatch(action);
@@ -81,7 +85,7 @@ const UserBar = (props) => {
           list: classes.list,
         }}
       >
-        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={handleMyAccountClick}>My account</MenuItem>
         <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
       </Menu>
     </div>
