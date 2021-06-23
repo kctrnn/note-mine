@@ -5,14 +5,9 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 const schema = yup.object().shape({
-  password: yup
-    .string()
-    .required('This value is required.')
-    .min(6, 'Please enter at least 6 characters.'),
-
+  password: yup.string(),
   rePassword: yup
     .string()
-    .required('This value is required.')
     .oneOf([yup.ref('password')], 'Password does not match.'),
 });
 
@@ -31,7 +26,11 @@ const UpdateUserForm = ({ onSubmit }) => {
 
   const handleSubmit = async (values) => {
     if (onSubmit) {
-      await onSubmit(values);
+      if (values.password === '') {
+        await onSubmit({});
+      } else {
+        await onSubmit(values);
+      }
     }
 
     form.reset();
