@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const ForgotPasswordPage = () => {
   return (
-    <div className='auth-forgot' style={{ paddingTop: '5rem' }}>
+    <div className='auth-forgot' style={{ padding: '5rem 1rem 3rem' }}>
       <Logo />
       <ForgotPasswordForm />
 

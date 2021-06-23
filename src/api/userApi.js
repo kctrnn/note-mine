@@ -11,8 +11,8 @@ const userApi = {
     return axiosClient.post(url, payload);
   },
 
-  getMe: () => {
-    const url = '/users/me';
+  getUser: (id) => {
+    const url = `/users/${id}`;
     return axiosClient.get(url);
   },
 

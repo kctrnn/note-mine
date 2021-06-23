@@ -87,7 +87,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className='auth-login' style={{ paddingTop: '5rem' }}>
+    <div className='auth-login' style={{ padding: '5rem 1rem 3rem' }}>
       <Logo />
       <LoginForm onSubmit={handleSubmit} />
 

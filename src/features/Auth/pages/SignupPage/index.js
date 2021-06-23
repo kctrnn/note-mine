@@ -36,10 +36,7 @@ const SignupPage = () => {
   };
 
   return (
-    <div
-      className='auth-signup'
-      style={{ paddingTop: '5rem', paddingBottom: '3rem' }}
-    >
+    <div className='auth-signup' style={{ padding: '5rem 1rem 3rem' }}>
       <Logo />
       <SignupForm onSubmit={handleSubmit} />
 
