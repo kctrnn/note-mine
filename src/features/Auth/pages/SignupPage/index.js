@@ -4,7 +4,7 @@ import Logo from 'components/Logo';
 import SignupForm from 'features/Auth/components/SignupForm';
 import { useSnackbar } from 'notistack';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 
 const SignupPage = () => {
@@ -13,12 +13,12 @@ const SignupPage = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const loggedInUser = useSelector((state) => state.user.current);
-  const isLoggedIn = !!loggedInUser.id;
+  // const loggedInUser = useSelector((state) => state.user.current);
+  // const isLoggedIn = !!loggedInUser.id;
 
-  if (isLoggedIn) {
-    history.push('/');
-  }
+  // if (isLoggedIn) {
+  //   history.push('/');
+  // }
 
   const handleSubmit = async (values) => {
     try {

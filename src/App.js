@@ -9,7 +9,8 @@ import ResetPasswordPage from 'features/Auth/pages/ResetPasswordPage';
 import SignupPage from 'features/Auth/pages/SignupPage';
 import UpdateUserPage from 'features/Auth/pages/UpdateUserPage';
 import React, { Suspense, useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   progress: {
@@ -54,6 +55,9 @@ function App() {
     awakeServer();
   }, []);
 
+  const loggedInUser = useSelector((state) => state.user.current);
+  const isLoggedIn = !!loggedInUser.id;
+
   return (
     <div className='note-mine-app' style={{ position: 'relative' }}>
       {data.length === 0 && (
@@ -80,14 +84,24 @@ function App() {
           <Switch>
             <Route exact path='/' component={Home} />
 
-            <Route path='/login' component={LoginPage} />
-            <Route path='/signup' component={SignupPage} />
+            <Route path='/login'>
+              {isLoggedIn ? <Redirect to='/' /> : <LoginPage />}
+            </Route>
+
+            <Route path='/signup'>
+              {isLoggedIn ? <Redirect to='/' /> : <SignupPage />}
+            </Route>
+
             <Route path='/forgot-password' component={ForgotPasswordPage} />
             <Route path='/reset-password' component={ResetPasswordPage} />
 
-            <Route path='/notes' component={Note} />
+            <Route path='/notes'>
+              {!isLoggedIn ? <Redirect to='/login' /> : <Note />}
+            </Route>
 
-            <Route path='/:username' component={UpdateUserPage} />
+            <Route path='/:username'>
+              {!isLoggedIn ? <Redirect to='/login' /> : <UpdateUserPage />}
+            </Route>
 
             <Route component={NotFound} />
           </Switch>

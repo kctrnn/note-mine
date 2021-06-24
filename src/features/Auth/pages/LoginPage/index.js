@@ -7,7 +7,7 @@ import Logo from 'components/Logo';
 import LoginForm from 'features/Auth/components/LoginForm';
 import { useSnackbar } from 'notistack';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -43,12 +43,12 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const loggedInUser = useSelector((state) => state.user.current);
-  const isLoggedIn = !!loggedInUser.id;
+  // const loggedInUser = useSelector((state) => state.user.current);
+  // const isLoggedIn = !!loggedInUser.id;
 
-  if (isLoggedIn) {
-    history.push('/');
-  }
+  // if (isLoggedIn) {
+  //   history.push('/');
+  // }
 
   const handleSubmit = async (values) => {
     try {
