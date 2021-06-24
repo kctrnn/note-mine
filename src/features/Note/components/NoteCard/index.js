@@ -74,18 +74,14 @@ const NoteCard = ({ title, text, date, pageId, pid, imageUrl }) => {
   };
 
   return (
-    <Paper
-      className={classes.noteCard}
-      variant='outlined'
-      onClick={handleCardClick}
-    >
+    <Paper className={classes.noteCard} variant='outlined'>
       {imageUrl && (
         <div className='card-image'>
           <img src={imageUrl} alt='' />
         </div>
       )}
 
-      <div className='card-content'>
+      <div className='card-content' onClick={handleCardClick}>
         <p className='card-date'>
           <span>Create at</span>
           {formattedDate}
@@ -96,16 +92,16 @@ const NoteCard = ({ title, text, date, pageId, pid, imageUrl }) => {
             <ContentEditable disabled html={blockHtml} key={index} />
           ))}
         </div>
+      </div>
 
-        <div className='card-actions'>
-          <IconButton color='default' onClick={handleDeleteCardClick}>
-            <DeleteOutlineIcon className={classes.btnDelete} />
-          </IconButton>
+      <div className='card-actions'>
+        <IconButton color='default' onClick={handleDeleteCardClick}>
+          <DeleteOutlineIcon className={classes.btnDelete} />
+        </IconButton>
 
-          {/* <Link to={`/notes/${pageId}`} className='card-edit'>
+        {/* <Link to={`/notes/${pageId}`} className='card-edit'>
             Edit
           </Link> */}
-        </div>
       </div>
     </Paper>
   );
