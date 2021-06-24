@@ -28,6 +28,17 @@ const useStyles = makeStyles((theme) => ({
     padding: '1.5rem',
     marginBottom: '3rem',
     borderRadius: '1rem',
+
+    cursor: 'pointer',
+
+    '&:hover': {
+      boxShadow: '0 0 15px 0 rgba(0, 0, 0, 0.1);',
+    },
+  },
+
+  btnDelete: {
+    fontSize: '2.2rem',
+    opacity: '.5',
   },
 }));
 
@@ -58,8 +69,16 @@ const NoteCard = ({ title, text, date, pageId, pid, imageUrl }) => {
     }
   };
 
+  const handleCardClick = () => {
+    history.push(`/notes/${pageId}`);
+  };
+
   return (
-    <Paper className={classes.noteCard} variant='outlined'>
+    <Paper
+      className={classes.noteCard}
+      variant='outlined'
+      onClick={handleCardClick}
+    >
       {imageUrl && (
         <div className='card-image'>
           <img src={imageUrl} alt='' />
@@ -80,12 +99,12 @@ const NoteCard = ({ title, text, date, pageId, pid, imageUrl }) => {
 
         <div className='card-actions'>
           <IconButton color='default' onClick={handleDeleteCardClick}>
-            <DeleteOutlineIcon className='card-delete' />
+            <DeleteOutlineIcon className={classes.btnDelete} />
           </IconButton>
 
-          <Link to={`/notes/${pageId}`} className='card-edit'>
+          {/* <Link to={`/notes/${pageId}`} className='card-edit'>
             Edit
-          </Link>
+          </Link> */}
         </div>
       </div>
     </Paper>
