@@ -59,7 +59,6 @@ function App() {
   return (
     <div className='note-mine-app' style={{ position: 'relative' }}>
     
-//     if heroku hasn't woken up and data is still an empty object
       {Object.keys(data).length === 0 && data.constructor === Object && (
         <Box className={classes.progress}>
           <p>
