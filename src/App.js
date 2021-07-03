@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
 const Note = React.lazy(() => import('./features/Note'));
 
 function App() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({});
   const classes = useStyles();
 
   // Because the server is created by Heroku, it will sleep after 30 minutes of inactivity.
@@ -58,7 +58,9 @@ function App() {
 
   return (
     <div className='note-mine-app' style={{ position: 'relative' }}>
-      {data.length === 0 && (
+    
+      // if heroku hasn't woken up and data is still an empty object
+      {Object.keys(data).length === 0 && data.constructor === Object && (
         <Box className={classes.progress}>
           <p>
             Heroku server is waking up...
@@ -70,7 +72,7 @@ function App() {
         </Box>
       )}
 
-      {data.length > 0 && (
+      {Object.keys(data).length !== 0 && data.constructor === Object && (
         <Suspense
           fallback={
             <CircularProgress
