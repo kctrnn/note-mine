@@ -76,7 +76,7 @@ const NoteCard = ({ title, text, date, pageId, pid, imageUrl }) => {
   return (
     <Paper className={classes.noteCard} variant='outlined'>
       {imageUrl && (
-        <div className='card-image'>
+        <div className='card-image' onClick={handleCardClick}>
           <img src={imageUrl} alt='' />
         </div>
       )}
