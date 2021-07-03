@@ -43,7 +43,7 @@ function App() {
   useEffect(() => {
     const awakeServer = async () => {
       try {
-        const res = await pageApi.get('kq6fa0cj0gwx31cghnz6');
+        const res = await pageApi.get(59);
         setData(res);
       } catch (error) {
         console.log(error);
