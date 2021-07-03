@@ -63,7 +63,7 @@ function App() {
       {data.length === 0 && (
         <Box className={classes.progress}>
           <p>
-            Server is waking up...
+            Heroku server is waking up...
             <br />
             don't leave please 😢😢
           </p>
