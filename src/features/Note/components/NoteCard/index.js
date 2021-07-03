@@ -5,7 +5,7 @@ import blockApi from 'api/blockApi';
 import pageApi from 'api/pageApi';
 import React from 'react';
 import ContentEditable from 'react-contenteditable';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import './NoteCard.scss';
 
 const MONTHS = [
@@ -30,15 +30,20 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '1rem',
 
     cursor: 'pointer',
+    position: 'relative',
 
     '&:hover': {
       boxShadow: '0 0 15px 0 rgba(0, 0, 0, 0.1);',
+
+      '& > .card-actions': {
+        opacity: '1',
+        transform: 'scale(1)',
+      },
     },
   },
 
   btnDelete: {
-    fontSize: '2.2rem',
-    opacity: '.5',
+    fontSize: '2.4rem',
   },
 }));
 
@@ -50,8 +55,10 @@ const NoteCard = ({ title, text, date, pageId, pid, imageUrl }) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const handleDeleteCardClick = async () => {
+  const handleDeleteCardClick = async (e) => {
     try {
+      e.stopPropagation();
+
       const deletedPage = await pageApi.get(pid);
       const deletedBlockIds = deletedPage.blocks.map((block) => block.id);
 
@@ -74,14 +81,18 @@ const NoteCard = ({ title, text, date, pageId, pid, imageUrl }) => {
   };
 
   return (
-    <Paper className={classes.noteCard} variant='outlined'>
+    <Paper
+      className={classes.noteCard}
+      variant='outlined'
+      onClick={handleCardClick}
+    >
       {imageUrl && (
-        <div className='card-image' onClick={handleCardClick}>
+        <div className='card-image'>
           <img src={imageUrl} alt='' />
         </div>
       )}
 
-      <div className='card-content' onClick={handleCardClick}>
+      <div className='card-content'>
         <p className='card-date'>
           <span>Create at</span>
           {formattedDate}
@@ -94,15 +105,13 @@ const NoteCard = ({ title, text, date, pageId, pid, imageUrl }) => {
         </div>
       </div>
 
-      <div className='card-actions'>
-        <IconButton color='default' onClick={handleDeleteCardClick}>
-          <DeleteOutlineIcon className={classes.btnDelete} />
-        </IconButton>
-
-        {/* <Link to={`/notes/${pageId}`} className='card-edit'>
-            Edit
-          </Link> */}
-      </div>
+      {pid !== 59 && (
+        <div className='card-actions'>
+          <IconButton color='default' onClick={handleDeleteCardClick}>
+            <DeleteOutlineIcon className={classes.btnDelete} />
+          </IconButton>
+        </div>
+      )}
     </Paper>
   );
 };
