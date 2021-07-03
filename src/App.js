@@ -43,9 +43,7 @@ function App() {
   useEffect(() => {
     const awakeServer = async () => {
       try {
-        const res = await pageApi.getAll({
-          [`creator.username`]: 'kctrnn',
-        });
+        const res = await pageApi.get('kq6fa0cj0gwx31cghnz6');
         setData(res);
       } catch (error) {
         console.log(error);
