@@ -13,12 +13,11 @@ const SignupPage = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  // const loggedInUser = useSelector((state) => state.user.current);
-  // const isLoggedIn = !!loggedInUser.id;
-
-  // if (isLoggedIn) {
-  //   history.push('/');
-  // }
+  // redirect to home page if is logged in
+  const isLoggedIn = Boolean(localStorage.getItem('access_token'));
+  if (isLoggedIn) {
+    history.push('/');
+  }
 
   const handleSubmit = async (values) => {
     try {
