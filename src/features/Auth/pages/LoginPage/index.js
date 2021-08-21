@@ -62,7 +62,7 @@ const LoginPage = () => {
 
       history.push('/notes');
     } catch (error) {
-      console.log('Failed to login:', error);
+      // console.log('Failed to login:', error);
       enqueueSnackbar(error.message, { variant: 'error' });
     }
   };
