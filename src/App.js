@@ -31,18 +31,22 @@ function App() {
     const awakeServer = async () => {
       try {
         await pageApi.get(59);
-
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            setLoading(false);
-          }, 3000);
-        });
       } catch (error) {
         console.log(error);
       }
     };
 
     awakeServer();
+  }, []);
+
+  useEffect(() => {
+    const loading = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+
+    return () => {
+      clearTimeout(loading);
+    };
   }, []);
 
   return (
