@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "blocks",
+  "info": {
+    "name": "block",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tag": {
+      "type": "string",
+      "required": true
+    },
+    "blockId": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "html": {
+      "type": "text"
+    },
+    "page": {
+      "via": "blocks",
+      "model": "page"
+    },
+    "creator": {
+      "via": "blocks",
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "position": {
+      "type": "string"
+    },
+    "imageUrl": {
+      "type": "string"
+    }
+  }
+}

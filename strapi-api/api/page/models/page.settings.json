@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pages",
+  "info": {
+    "name": "page",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "pageId": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "blocks": {
+      "via": "page",
+      "collection": "block"
+    },
+    "creator": {
+      "via": "pages",
+      "plugin": "users-permissions",
+      "model": "user"
+    }
+  }
+}
